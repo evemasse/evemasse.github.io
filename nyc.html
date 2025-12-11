@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    
     <script>
         tailwind.config = {
             theme: {
@@ -204,6 +207,14 @@
             font-size: 0.95rem;
             line-height: 1.6;
         }
+        
+        #map-container {
+            height: 500px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -212,13 +223,9 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="index.html" class="font-playfair text-2xl font-bold text-white">AMÉRIPROUT</a>
             <div class="flex gap-8">
-                <a href="index.html">Accueil</a>
-                <a href="participants.html">Participants</a>
-                <a href="carte-itineraire.html">Carte</a>
                 <a href="nyc.html">NYC</a>
                 <a href="roadtrip.html">Road Trip</a>
                 <a href="mexique.html">Mexique</a>
-                <a href="budget.html">Budget</a>
             </div>
         </div>
     </nav>
@@ -228,6 +235,12 @@
         <h1>🗽 NEW YORK CITY</h1>
         <p class="text-xl font-light text-blue-100">15-19 Décembre | La Grosse Pomme en Hiver</p>
     </div>
+    
+    <!-- MAP SECTION -->
+    <section class="max-w-7xl mx-auto px-6 py-12">
+        <h2 class="section-title mb-8">Carte Interactive de New York</h2>
+        <div id="map-container"></div>
+    </section>
     
     <!-- CONTENU -->
     <main class="max-w-7xl mx-auto px-6 py-20">
@@ -363,16 +376,93 @@
     
     <!-- FOOTER -->
     <footer class="bg-gradient-to-r from-bleu-majorelle to-blue-900 text-white py-16 mt-32">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h3 class="font-playfair text-3xl mb-4">NEW YORK CITY</h3>
-            <p class="font-montserrat font-light mb-6 text-lg">Une aventure urbaine de 4 jours intenses</p>
-            <div class="flex justify-center gap-8 mb-8">
-                <a href="index.html" class="hover:text-jaune-citron">Accueil</a>
-                <a href="roadtrip.html" class="hover:text-jaune-citron">Prochaine Étape</a>
-                <a href="carte-itineraire.html" class="hover:text-jaune-citron">Voir Carte</a>
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Convertisseur de Devises -->
+            <div class="bg-blue-800 rounded-lg p-8 mb-12">
+                <h3 class="font-playfair text-2xl mb-6 text-center">💱 Convertisseur de Devises</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">EUR (€)</label>
+                        <input type="number" id="eur" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" value="1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">USD ($)</label>
+                        <input type="number" id="usd" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">MXN (₱)</label>
+                        <input type="number" id="mxn" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" readonly>
+                    </div>
+                </div>
             </div>
-            <p class="text-sm text-blue-200">→ Vers le Road Trip (20 Décembre)</p>
+            
+            <!-- Liens Footer -->
+            <div class="text-center border-t border-blue-700 pt-8">
+                <h3 class="font-playfair text-3xl mb-4">NEW YORK CITY</h3>
+                <p class="font-montserrat font-light mb-6 text-lg">Une aventure urbaine de 4 jours intenses</p>
+                <div class="flex justify-center gap-8 mb-8 flex-wrap">
+                    <a href="index.html" class="hover:text-jaune-citron">Accueil</a>
+                    <a href="roadtrip.html" class="hover:text-jaune-citron">Prochaine Étape</a>
+                    <a href="carte-itineraire.html" class="hover:text-jaune-citron">Voir Carte</a>
+                </div>
+                <p class="text-sm text-blue-200">→ Vers le Road Trip (20 Décembre)</p>
+            </div>
         </div>
     </footer>
+    
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+        // Convertisseur de devises
+        const rates = {
+            EUR: 1,
+            USD: 1.08,
+            MXN: 18.50
+        };
+        
+        const eurInput = document.getElementById('eur');
+        const usdInput = document.getElementById('usd');
+        const mxnInput = document.getElementById('mxn');
+        
+        function updateCurrency() {
+            const eurValue = parseFloat(eurInput.value) || 0;
+            usdInput.value = (eurValue * rates.USD).toFixed(2);
+            mxnInput.value = (eurValue * rates.MXN).toFixed(2);
+        }
+        
+        eurInput.addEventListener('input', updateCurrency);
+        updateCurrency();
+        
+        // Initialiser la carte centrée sur New York
+        const map = L.map('map-container').setView([40.7128, -74.0060], 11);
+        
+        // Ajouter les tuiles OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19,
+            minZoom: 8
+        }).addTo(map);
+        
+        // Marqueurs pour les points d'intérêt principaux
+        const locations = [
+            { lat: 40.7580, lng: -73.9855, name: 'Times Square', desc: 'Cœur touristique de NYC' },
+            { lat: 40.7484, lng: -73.9857, name: 'Empire State Building', desc: 'Vue panoramique emblématique' },
+            { lat: 40.7061, lng: -74.0088, name: 'Statue de la Liberté', desc: 'Monument iconique' },
+            { lat: 40.7832, lng: -73.9746, name: 'Central Park', desc: 'Poumon vert de Manhattan' },
+            { lat: 40.7489, lng: -73.9680, name: 'Grand Central Terminal', desc: 'Architecture grandiose' },
+            { lat: 40.7505, lng: -73.9934, name: 'Port Authority / Hébergement Hoboken', desc: 'Départ pour Hoboken' }
+        ];
+        
+        locations.forEach(location => {
+            L.circleMarker([location.lat, location.lng], {
+                radius: 8,
+                fillColor: '#0476d9',
+                color: '#f2cb05',
+                weight: 3,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).bindPopup(`<strong>${location.name}</strong><br>${location.desc}`).addTo(map);
+        });
+    </script>
 </body>
 </html>

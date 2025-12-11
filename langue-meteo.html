@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Langue & Météo | AMÉRIPROUT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'bleu-majorelle': '#0476d9',
+                        'jaune-citron': '#f2cb05',
+                        'cream': '#f9f9f9',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        nav {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            box-shadow: 0 8px 32px rgba(4, 118, 217, 0.15);
+        }
+        
+        nav a {
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #f2cb05;
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            color: white;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .page-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: #0476d9;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #0476d9, #f2cb05);
+            border-radius: 2px;
+        }
+        
+        .language-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            border-top: 4px solid #0476d9;
+        }
+        
+        .language-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+        
+        .language-card h3 {
+            color: #0476d9;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .phrase {
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #f2cb05;
+        }
+        
+        .phrase-english {
+            font-weight: 600;
+            color: #0476d9;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .phrase-spanish {
+            color: #666;
+            font-size: 0.95rem;
+            font-style: italic;
+            margin-bottom: 0.3rem;
+        }
+        
+        .phrase-pronunciation {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .weather-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 4px solid #34d399;
+        }
+        
+        .weather-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+        
+        .city-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0476d9;
+            margin-bottom: 1rem;
+        }
+        
+        .weather-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .weather-item {
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .weather-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 0.3rem;
+        }
+        
+        .weather-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0476d9;
+        }
+        
+        .daily-forecast {
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .forecast-day {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .forecast-day:last-child {
+            border-bottom: none;
+        }
+        
+        .forecast-date {
+            font-weight: 600;
+            color: #0476d9;
+            flex: 1;
+        }
+        
+        .forecast-temp {
+            color: #666;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .forecast-weather {
+            color: #f2cb05;
+            flex: 1;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 py-4 px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-playfair text-2xl font-bold text-white">AMÉRIPROUT</a>
+            <div class="flex gap-8">
+                <a href="nyc.html">NYC</a>
+                <a href="roadtrip.html">Road Trip</a>
+                <a href="mexique.html">Mexique</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <h1>🌍 Langue & Météo</h1>
+        <p class="text-xl font-light text-blue-100">Phrasaire Utile + Prévisions Météo par Ville</p>
+    </div>
+    
+    <!-- CONTENU -->
+    <main class="max-w-7xl mx-auto px-6 py-20">
+        
+        <!-- SECTION ANGLAIS -->
+        <section class="mb-20">
+            <h2 class="section-title">🇺🇸 Anglais Essentiel</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                
+                <!-- ANGLAIS NYC -->
+                <div class="language-card">
+                    <h3>📍 New York City</h3>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Hello / Hi</div>
+                        <div class="phrase-spanish">Bonjour (informel)</div>
+                        <div class="phrase-pronunciation">Entrée standard</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">How are you?</div>
+                        <div class="phrase-spanish">Comment ça va ?</div>
+                        <div class="phrase-pronunciation">Question courante</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Where is the subway?</div>
+                        <div class="phrase-spanish">Où est la station de métro ?</div>
+                        <div class="phrase-pronunciation">Transport essentiel</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">One ticket to Brooklyn, please</div>
+                        <div class="phrase-spanish">Un ticket pour Brooklyn, s'il vous plaît</div>
+                        <div class="phrase-pronunciation">Transactions</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">How much does this cost?</div>
+                        <div class="phrase-spanish">Combien ça coûte ?</div>
+                        <div class="phrase-pronunciation">Essentiel shopping</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Can I take a photo?</div>
+                        <div class="phrase-spanish">Je peux prendre une photo ?</div>
+                        <div class="phrase-pronunciation">Documenter l'aventure</div>
+                    </div>
+                    
+                </div>
+                
+                <!-- ANGLAIS USA -->
+                <div class="language-card">
+                    <h3>🚗 Sur la Route USA</h3>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">I need gas / Fill up, please</div>
+                        <div class="phrase-spanish">Je dois faire le plein</div>
+                        <div class="phrase-pronunciation">Indispensable van</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Where is the nearest hotel?</div>
+                        <div class="phrase-spanish">Où est l'hôtel le plus proche ?</div>
+                        <div class="phrase-pronunciation">Logement</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">A table for five, please</div>
+                        <div class="phrase-spanish">Une table pour 5 personnes</div>
+                        <div class="phrase-pronunciation">Restaurant</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">What is your recommendation?</div>
+                        <div class="phrase-spanish">Que recommandez-vous ?</div>
+                        <div class="phrase-pronunciation">Gastronomie</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">How far is it?</div>
+                        <div class="phrase-spanish">C'est à quelle distance ?</div>
+                        <div class="phrase-pronunciation">Navigation</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Do you speak English?</div>
+                        <div class="phrase-spanish">Parlez-vous anglais ?</div>
+                        <div class="phrase-pronunciation">Communication de base</div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- SECTION ESPAGNOL -->
+        <section class="mb-20">
+            <h2 class="section-title">🇲🇽 Espagnol Essentiel</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                
+                <!-- ESPAGNOL BASIQUE -->
+                <div class="language-card" style="border-top-color: #ec4899;">
+                    <h3 style="color: #ec4899;">🗣️ Phrases Clés</h3>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Hello / Hi (Español)</div>
+                        <div class="phrase-spanish">Hola</div>
+                        <div class="phrase-pronunciation">(OH-la) Bonjour</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Good morning</div>
+                        <div class="phrase-spanish">Buenos días</div>
+                        <div class="phrase-pronunciation">(BWEH-nos DEE-as)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Good afternoon</div>
+                        <div class="phrase-spanish">Buenas tardes</div>
+                        <div class="phrase-pronunciation">(BWEH-nas TAR-des)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Thank you</div>
+                        <div class="phrase-spanish">Gracias</div>
+                        <div class="phrase-pronunciation">(GRAH-see-as)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">You're welcome</div>
+                        <div class="phrase-spanish">De nada</div>
+                        <div class="phrase-pronunciation">(deh NAH-da)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Please</div>
+                        <div class="phrase-spanish">Por favor</div>
+                        <div class="phrase-pronunciation">(por fah-VOR)</div>
+                    </div>
+                    
+                </div>
+                
+                <!-- ESPAGNOL VOYAGE -->
+                <div class="language-card" style="border-top-color: #ec4899;">
+                    <h3 style="color: #ec4899;">✈️ Au Mexique</h3>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Where is the beach?</div>
+                        <div class="phrase-spanish">¿Dónde está la playa?</div>
+                        <div class="phrase-pronunciation">(DON-deh ehs-TAH la PLAH-ya)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Water / Beer</div>
+                        <div class="phrase-spanish">Agua / Cerveza</div>
+                        <div class="phrase-pronunciation">(AH-gua / Ser-VEH-sa)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">How much?</div>
+                        <div class="phrase-spanish">¿Cuánto cuesta?</div>
+                        <div class="phrase-pronunciation">(KWAN-to KWES-ta)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">The bill, please</div>
+                        <div class="phrase-spanish">La cuenta, por favor</div>
+                        <div class="phrase-pronunciation">(la KWEN-ta, por fah-VOR)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Cheers!</div>
+                        <div class="phrase-spanish">¡Salud!</div>
+                        <div class="phrase-pronunciation">(Sa-LOOD)</div>
+                    </div>
+                    
+                    <div class="phrase">
+                        <div class="phrase-english">Beautiful / Great</div>
+                        <div class="phrase-spanish">Hermoso / Fantástico</div>
+                        <div class="phrase-pronunciation">(er-MOH-so / fan-TAS-ti-ko)</div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- SECTION MÉTÉO -->
+        <section class="mb-20">
+            <h2 class="section-title">🌤️ Prévisions Météorologiques</h2>
+            <p class="text-center text-gray-700 mb-16 text-lg">Prévisions estimées pour décembre & janvier | Conditions typiques</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                
+                <!-- NYC -->
+                <div class="weather-card">
+                    <div class="city-name">🗽 New York City (15-19 Déc)</div>
+                    <div class="weather-grid">
+                        <div class="weather-item">
+                            <div class="weather-label">Température</div>
+                            <div class="weather-value">-2°C à 5°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Ressenti</div>
+                            <div class="weather-value">-8°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Précipitations</div>
+                            <div class="weather-value">Neige possible</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Humidité</div>
+                            <div class="weather-value">65%</div>
+                        </div>
+                    </div>
+                    <div class="daily-forecast">
+                        <div style="font-weight: 600; color: #0476d9; margin-bottom: 1rem;">Prévisions par Jour</div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">15 Déc</span>
+                            <span class="forecast-temp">3°C</span>
+                            <span class="forecast-weather">Nuageux</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">16 Déc</span>
+                            <span class="forecast-temp">-1°C</span>
+                            <span class="forecast-weather">Neige</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">17 Déc</span>
+                            <span class="forecast-temp">2°C</span>
+                            <span class="forecast-weather">Dégagé</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">18 Déc</span>
+                            <span class="forecast-temp">1°C</span>
+                            <span class="forecast-weather">Nuageux</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">19 Déc</span>
+                            <span class="forecast-temp">4°C</span>
+                            <span class="forecast-weather">Partiellement couvert</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- WASHINGTON DC -->
+                <div class="weather-card">
+                    <div class="city-name">🏛️ Washington DC (20 Déc)</div>
+                    <div class="weather-grid">
+                        <div class="weather-item">
+                            <div class="weather-label">Température</div>
+                            <div class="weather-value">0°C à 8°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Ressenti</div>
+                            <div class="weather-value">-5°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Précipitations</div>
+                            <div class="weather-value">Léger risque</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Humidité</div>
+                            <div class="weather-value">60%</div>
+                        </div>
+                    </div>
+                    <div class="daily-forecast">
+                        <div style="font-weight: 600; color: #0476d9; margin-bottom: 1rem;">Idéal pour explorer</div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">Jour 1</span>
+                            <span class="forecast-temp">5°C</span>
+                            <span class="forecast-weather">Ensoleillé</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">Jour 2</span>
+                            <span class="forecast-temp">3°C</span>
+                            <span class="forecast-weather">Nuageux</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SHENANDOAH -->
+                <div class="weather-card">
+                    <div class="city-name">⛰️ Shenandoah (21-22 Déc)</div>
+                    <div class="weather-grid">
+                        <div class="weather-item">
+                            <div class="weather-label">Température</div>
+                            <div class="weather-value">-5°C à 2°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Ressenti</div>
+                            <div class="weather-value">-12°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Précipitations</div>
+                            <div class="weather-value">Neige possible</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Humidité</div>
+                            <div class="weather-value">70%</div>
+                        </div>
+                    </div>
+                    <div class="daily-forecast">
+                        <div style="font-weight: 600; color: #0476d9; margin-bottom: 1rem;">Magnifique en hiver</div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">21 Déc</span>
+                            <span class="forecast-temp">-2°C</span>
+                            <span class="forecast-weather">Enneigé</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">22 Déc</span>
+                            <span class="forecast-temp">0°C</span>
+                            <span class="forecast-weather">Dégagé</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CHARLESTON -->
+                <div class="weather-card">
+                    <div class="city-name">🏛️ Charleston (23-24 Déc)</div>
+                    <div class="weather-grid">
+                        <div class="weather-item">
+                            <div class="weather-label">Température</div>
+                            <div class="weather-value">8°C à 15°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Ressenti</div>
+                            <div class="weather-value">5°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Précipitations</div>
+                            <div class="weather-value">Rare</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Humidité</div>
+                            <div class="weather-value">65%</div>
+                        </div>
+                    </div>
+                    <div class="daily-forecast">
+                        <div style="font-weight: 600; color: #0476d9; margin-bottom: 1rem;">Climat plus doux</div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">23 Déc</span>
+                            <span class="forecast-temp">12°C</span>
+                            <span class="forecast-weather">Ensoleillé</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">24 Déc</span>
+                            <span class="forecast-temp">10°C</span>
+                            <span class="forecast-weather">Partiellement couvert</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SAVANNAH -->
+                <div class="weather-card">
+                    <div class="city-name">🌳 Savannah (25-26 Déc)</div>
+                    <div class="weather-grid">
+                        <div class="weather-item">
+                            <div class="weather-label">Température</div>
+                            <div class="weather-value">10°C à 17°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Ressenti</div>
+                            <div class="weather-value">8°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Précipitations</div>
+                            <div class="weather-value">10% risque</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Humidité</div>
+                            <div class="weather-value">68%</div>
+                        </div>
+                    </div>
+                    <div class="daily-forecast">
+                        <div style="font-weight: 600; color: #0476d9; margin-bottom: 1rem;">Température montante</div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">25 Déc</span>
+                            <span class="forecast-temp">14°C</span>
+                            <span class="forecast-weather">Ensoleillé</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">26 Déc</span>
+                            <span class="forecast-temp">16°C</span>
+                            <span class="forecast-weather">Dégagé</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- MIAMI -->
+                <div class="weather-card">
+                    <div class="city-name">🏖️ Miami (27-30 Déc)</div>
+                    <div class="weather-grid">
+                        <div class="weather-item">
+                            <div class="weather-label">Température</div>
+                            <div class="weather-value">20°C à 26°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Ressenti</div>
+                            <div class="weather-value">22°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Précipitations</div>
+                            <div class="weather-value">Rare</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Humidité</div>
+                            <div class="weather-value">72%</div>
+                        </div>
+                    </div>
+                    <div class="daily-forecast">
+                        <div style="font-weight: 600; color: #0476d9; margin-bottom: 1rem;">Tropical et beau</div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">27-30 Déc</span>
+                            <span class="forecast-temp">24°C</span>
+                            <span class="forecast-weather">Ensoleillé</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CANCUN & HOLBOX -->
+                <div class="weather-card">
+                    <div class="city-name">🏝️ Cancun & Holbox (31 Déc - 7 Jan)</div>
+                    <div class="weather-grid">
+                        <div class="weather-item">
+                            <div class="weather-label">Température</div>
+                            <div class="weather-value">25°C à 30°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Ressenti</div>
+                            <div class="weather-value">28°C</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Précipitations</div>
+                            <div class="weather-value">Très rare</div>
+                        </div>
+                        <div class="weather-item">
+                            <div class="weather-label">Humidité</div>
+                            <div class="weather-value">75%</div>
+                        </div>
+                    </div>
+                    <div class="daily-forecast">
+                        <div style="font-weight: 600; color: #0476d9; margin-bottom: 1rem;">Paradis tropical</div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">31 Déc</span>
+                            <span class="forecast-temp">28°C</span>
+                            <span class="forecast-weather">Parfait 🎉</span>
+                        </div>
+                        <div class="forecast-day">
+                            <span class="forecast-date">1-7 Jan</span>
+                            <span class="forecast-temp">27°C</span>
+                            <span class="forecast-weather">Idéal</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-r from-bleu-majorelle to-blue-900 text-white py-16 mt-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Convertisseur de Devises -->
+            <div class="bg-blue-800 rounded-lg p-8 mb-12">
+                <h3 class="font-playfair text-2xl mb-6 text-center">💱 Convertisseur de Devises</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">EUR (€)</label>
+                        <input type="number" id="eur" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" value="1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">USD ($)</label>
+                        <input type="number" id="usd" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">MXN (₱)</label>
+                        <input type="number" id="mxn" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" readonly>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Liens Footer -->
+            <div class="text-center border-t border-blue-700 pt-8">
+                <h3 class="font-playfair text-3xl mb-4">Langue & Météo</h3>
+                <p class="font-montserrat font-light mb-6 text-lg">Tout ce qu'il faut savoir pour voyager en confiance</p>
+                <div class="flex justify-center gap-8 mb-8 flex-wrap">
+                    <a href="index.html" class="hover:text-jaune-citron">Accueil</a>
+                    <a href="budget.html" class="hover:text-jaune-citron">Budget</a>
+                    <a href="carte-itineraire.html" class="hover:text-jaune-citron">Carte</a>
+                </div>
+                <p class="text-sm text-blue-200">Guide pratique pour l'aventure AMÉRIPROUT</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Convertisseur de devises
+        const rates = {
+            EUR: 1,
+            USD: 1.08,
+            MXN: 18.50
+        };
+        
+        const eurInput = document.getElementById('eur');
+        const usdInput = document.getElementById('usd');
+        const mxnInput = document.getElementById('mxn');
+        
+        function updateCurrency() {
+            const eurValue = parseFloat(eurInput.value) || 0;
+            usdInput.value = (eurValue * rates.USD).toFixed(2);
+            mxnInput.value = (eurValue * rates.MXN).toFixed(2);
+        }
+        
+        eurInput.addEventListener('input', updateCurrency);
+        updateCurrency();
+    </script>
+</body>
+</html>
