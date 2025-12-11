@@ -18,9 +18,9 @@
                         'montserrat': ['Montserrat', 'sans-serif'],
                     },
                     colors: {
-                        'bleu-majorelle': '#0476d9',
-                        'jaune-citron': '#f2cb05',
-                        'cream': '#f9f9f9',
+                        'bleu-majorelle': '#5B9FB5',
+                        'jaune-citron': '#F4D9A6',
+                        'cream': '#FAFBF8',
                     },
                 }
             }
@@ -41,8 +41,8 @@
         }
         
         nav {
-            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
-            box-shadow: 0 8px 32px rgba(4, 118, 217, 0.15);
+            background: linear-gradient(135deg, #5B9FB5 0%, #4A7A92 100%);
+            box-shadow: 0 8px 32px rgba(91, 159, 181, 0.15);
         }
         
         nav a {
@@ -60,7 +60,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background-color: #f2cb05;
+            background-color: #F4D9A6;
             transition: width 0.3s ease;
         }
         
@@ -69,14 +69,14 @@
         }
         
         .page-header {
-            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            background: linear-gradient(135deg, #5B9FB5 0%, #4A7A92 100%);
             color: white;
             padding: 6rem 2rem 4rem;
             text-align: center;
         }
         
         .page-header h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 8vw, 3.5rem);
             margin-bottom: 1rem;
         }
         
@@ -100,7 +100,7 @@
             width: 100%;
             height: 250px;
             overflow: hidden;
-            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            background: linear-gradient(135deg, #5B9FB5 0%, #4A7A92 100%);
             position: relative;
         }
         
@@ -125,12 +125,12 @@
         
         .participant-info h3 {
             font-size: 2rem;
-            color: #0476d9;
+            color: #5B9FB5;
             margin-bottom: 0.5rem;
         }
         
         .participant-role {
-            color: #f2cb05;
+            color: #F4D9A6;
             font-weight: 600;
             margin-bottom: 1rem;
             font-size: 0.95rem;
@@ -149,7 +149,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
             padding-top: 1rem;
-            border-top: 2px solid #f2cb05;
+            border-top: 2px solid #F4D9A6;
         }
         
         .stat {
@@ -159,7 +159,7 @@
         .stat-value {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #0476d9;
+            color: #5B9FB5;
         }
         
         .stat-label {
@@ -169,8 +169,8 @@
         }
         
         .section-title {
-            font-size: 2.5rem;
-            color: #0476d9;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            color: #5B9FB5;
             text-align: center;
             margin-bottom: 3rem;
             position: relative;
@@ -186,8 +186,72 @@
             transform: translateX(-50%);
             width: 80px;
             height: 4px;
-            background: linear-gradient(90deg, #0476d9, #f2cb05);
+            background: linear-gradient(90deg, #5B9FB5, #F4D9A6);
             border-radius: 2px;
+        }
+        
+        .participant-vertical-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+        }
+        
+        .participant-vertical-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(91, 159, 181, 0.3);
+        }
+        
+        .participant-vertical-image {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .participant-vertical-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            transition: transform 0.4s ease;
+        }
+        
+        .participant-vertical-card:hover .participant-vertical-image img {
+            transform: scale(1.05);
+        }
+        
+        .participant-vertical-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 1.5rem 1rem 1rem;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        
+        .participant-vertical-card:hover .participant-vertical-overlay {
+            transform: translateY(0);
+        }
+        
+        .participant-vertical-overlay h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .participant-vertical-overlay p {
+            font-size: 0.85rem;
+            margin: 0;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -221,7 +285,67 @@
         </div>
         
         <!-- PARTICIPANTS GRID -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
+            
+            <!-- LÉON -->
+            <div class="participant-vertical-card">
+                <div class="participant-vertical-image">
+                    <img src="tête/leo.PNG" alt="Léo">
+                    <div class="participant-vertical-overlay">
+                        <h3>Léo</h3>
+                        <p>🎬 Le Cinéaste</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SARAH -->
+            <div class="participant-vertical-card">
+                <div class="participant-vertical-image">
+                    <img src="tête/sarah.PNG" alt="Sarah">
+                    <div class="participant-vertical-overlay">
+                        <h3>Sarah</h3>
+                        <p>🗺️ La Navigatrice</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- EMMA -->
+            <div class="participant-vertical-card">
+                <div class="participant-vertical-image">
+                    <img src="tête/emma.PNG" alt="Emma">
+                    <div class="participant-vertical-overlay">
+                        <h3>Emma</h3>
+                        <p>❤️ L'Aventurière</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PALMYRE -->
+            <div class="participant-vertical-card">
+                <div class="participant-vertical-image">
+                    <img src="tête/palmyre.PNG" alt="Palmyre">
+                    <div class="participant-vertical-overlay">
+                        <h3>Palmyre</h3>
+                        <p>🌿 La Sage</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- EVE -->
+            <div class="participant-vertical-card">
+                <div class="participant-vertical-image">
+                    <img src="tête/eve.PNG" alt="Eve">
+                    <div class="participant-vertical-overlay">
+                        <h3>Eve</h3>
+                        <p>💪 Chercheuse de Limites</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- DESCRIPTIONS DÉTAILLÉES -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-12 mt-20">
             
             <!-- LÉON -->
             <div class="participant-card">
@@ -339,11 +463,6 @@
                             <div class="stat-value">0</div>
                             <div class="stat-label">Limites</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
         
     </main>
     
