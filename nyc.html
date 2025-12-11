@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New York City | AMÉRIPROUT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'bleu-majorelle': '#0476d9',
+                        'jaune-citron': '#f2cb05',
+                        'cream': '#f9f9f9',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        nav {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            box-shadow: 0 8px 32px rgba(4, 118, 217, 0.15);
+        }
+        
+        nav a {
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #f2cb05;
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            color: white;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .hero-section h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: #0476d9;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #0476d9, #f2cb05);
+            border-radius: 2px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .info-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+        
+        .info-card h3 {
+            color: #0476d9;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            background-color: #f2cb05;
+            color: #0476d9;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .activity-card {
+            background: white;
+            border-left: 4px solid #0476d9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .activity-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transform: translateX(4px);
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            color: #0476d9;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .activity-desc {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 50px;
+            padding-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 4px;
+            width: 18px;
+            height: 18px;
+            background-color: #f2cb05;
+            border: 3px solid #0476d9;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 26px;
+            width: 2px;
+            height: calc(100% + 4px);
+            background-color: #0476d9;
+            opacity: 0.3;
+        }
+        
+        .timeline-day {
+            font-weight: 700;
+            color: #0476d9;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .timeline-desc {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 py-4 px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-playfair text-2xl font-bold text-white">AMÉRIPROUT</a>
+            <div class="flex gap-8">
+                <a href="index.html">Accueil</a>
+                <a href="participants.html">Participants</a>
+                <a href="carte-itineraire.html">Carte</a>
+                <a href="nyc.html">NYC</a>
+                <a href="roadtrip.html">Road Trip</a>
+                <a href="mexique.html">Mexique</a>
+                <a href="budget.html">Budget</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+        <h1>🗽 NEW YORK CITY</h1>
+        <p class="text-xl font-light text-blue-100">15-19 Décembre | La Grosse Pomme en Hiver</p>
+    </div>
+    
+    <!-- CONTENU -->
+    <main class="max-w-7xl mx-auto px-6 py-20">
+        
+        <!-- INTRODUCTION -->
+        <section class="mb-20">
+            <div class="bg-blue-50 border-l-4 border-bleu-majorelle p-8 rounded-lg">
+                <h2 class="font-playfair text-3xl text-bleu-majorelle mb-4">Une Arrivée Spectaculaire</h2>
+                <p class="text-gray-700 leading-relaxed text-lg">
+                    New York City nous accueille sous sa robe hivernale la plus glamour. Après un train depuis Montréal, notre groupe débarque dans la mégapole new-yorkaise pour quatre jours intenses. Du skyline scintillant de Manhattan aux ponts iconiques, en passant par les musées de classe mondiale et les théâtres de Broadway, NYC promet une immersion totale dans le rythme américain.
+                </p>
+            </div>
+        </section>
+        
+        <!-- TRANSPORT & HÉBERGEMENT -->
+        <section class="mb-20">
+            <h2 class="section-title">Logistique du Voyage</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                <div class="info-card">
+                    <span class="badge">🚂 TRANSPORT</span>
+                    <h3>Train Montréal → New York</h3>
+                    <div class="space-y-3">
+                        <p><strong>Date:</strong> 15 Décembre</p>
+                        <p><strong>Heure de départ:</strong> 11h10</p>
+                        <p><strong>Compagnie:</strong> Amtrak Northeast Regional</p>
+                        <p><strong>Durée:</strong> ~12 heures</p>
+                        <p class="text-sm text-gray-600 mt-4">Voyage pittoresque le long des côtes. Prendre des rafraîchissements à bord et profiter de la vue sur les paysages enneigés.</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <span class="badge">🏨 HÉBERGEMENT</span>
+                    <h3>Hoboken, New Jersey</h3>
+                    <div class="space-y-3">
+                        <p><strong>Localisation:</strong> Hoboken (face à Manhattan)</p>
+                        <p><strong>Plateforme:</strong> Trivago</p>
+                        <p><strong>Numéro de Réservation:</strong> 11834392</p>
+                        <p><strong>Durée:</strong> 4 nuits (15-19 Déc)</p>
+                        <p class="text-sm text-gray-600 mt-4">Vue spectaculaire sur le skyline de Manhattan. Accès facile via PATH train (2-3 min à pied).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ITINÉRAIRE DÉTAILLÉ -->
+        <section class="mb-20">
+            <h2 class="section-title">Les 4 Jours à NYC</h2>
+            <div class="max-w-3xl mx-auto mt-16">
+                <div class="timeline-item">
+                    <div class="timeline-day">Jour 1 - 15 Décembre</div>
+                    <div class="timeline-desc">Arrivée en fin d'après-midi. Installation à Hoboken. Première exploration du PATH train et vue de nuit sur le skyline depuis le waterfront. Dîner dans un restaurant local de Jersey City.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-day">Jour 2 - 16 Décembre</div>
+                    <div class="timeline-desc">Grand jour à Manhattan ! Times Square, Rockefeller Center illuminé, shopping dans la 5e Avenue, puis Broadway pour un spectacle en soirée. Ambiance festive pré-natale.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-day">Jour 3 - 17 Décembre</div>
+                    <div class="timeline-desc">Musées et culture: The Metropolitan Museum ou Museum of Modern Art. Promenade dans Central Park, patinoire Wollman. Lunch casual, visite du Brooklyn Bridge et promenade à Brooklyn Heights.</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-day">Jour 4 - 18-19 Décembre</div>
+                    <div class="timeline-desc">Liberté de programme. Options: SoHo & Little Italy, Lower East Side, shopping à Union Square, visite de la Statue de la Liberté, ou musées supplémentaires. Dîner d'adieu dans un restaurant branché.</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ACTIVITÉS INCONTOURNABLES -->
+        <section class="mb-20">
+            <h2 class="section-title">À Découvrir Absolument</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+                <div class="activity-card">
+                    <div class="activity-title">🎭 Broadway Theater District</div>
+                    <div class="activity-desc">Spectacles de classe mondiale. Réserver en ligne ou via TKTS pour les meilleurs tarifs. Les comédies musicales emblématiques valent vraiment le détour.</div>
+                </div>
+                
+                <div class="activity-card">
+                    <div class="activity-title">⛸️ Patinoire Central Park</div>
+                    <div class="activity-desc">L'expérience hivernale par excellence. La Wollman Rink offre une vue magique sur les gratte-ciel. Idéal en fin d'après-midi avant le coucher de soleil.</div>
+                </div>
+                
+                <div class="activity-card">
+                    <div class="activity-title">🌉 Brooklyn Bridge & Waterfront</div>
+                    <div class="activity-desc">La traversée iconique à pied offre des photos exceptionnelles. Poursuivre jusqu'à Brooklyn Heights Promenade pour la meilleure vue du skyline.</div>
+                </div>
+                
+                <div class="activity-card">
+                    <div class="activity-title">🎨 The Metropolitan Museum</div>
+                    <div class="activity-desc">Un des plus grands musées du monde. 5th Avenue face à Central Park. Les collections égyptiennes et asiatiques sont spectaculaires.</div>
+                </div>
+                
+                <div class="activity-card">
+                    <div class="activity-title">🛒 5th Avenue Shopping</div>
+                    <div class="activity-desc">L'avenue la plus prestigieuse au monde. Designer boutiques, grands magasins (Saks, Bergdorf). Essentiellement du shopping haut de gamme.</div>
+                </div>
+                
+                <div class="activity-card">
+                    <div class="activity-title">🗼 Rockefeller Center</div>
+                    <div class="activity-desc">Sapin de Noël géant, illuminations festives, et vue depuis la terrasse de l'observatoire. Le cœur de New York en décembre.</div>
+                </div>
+                
+                <div class="activity-card">
+                    <div class="activity-title">🍕 Lower East Side</div>
+                    <div class="activity-desc">Quartier bohème avec galeries, boutiques vintage, et restaurants éclectiques. Vibe alternative et authentique.</div>
+                </div>
+                
+                <div class="activity-card">
+                    <div class="activity-title">🗽 Statue de la Liberté</div>
+                    <div class="activity-desc">Le symbole par excellence. Ferry depuis Battery Park. À faire au moins une fois dans la vie avec vue sur l'Île aux Immigrants.</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CONSEILS PRATIQUES -->
+        <section class="mb-20">
+            <div class="bg-yellow-50 border-l-4 border-jaune-citron p-8 rounded-lg">
+                <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">💡 Conseils Pratiques</h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li><strong>Métro:</strong> Acheter une MetroCard 7-jours pour illimité bus + métro</li>
+                    <li><strong>Froid:</strong> Décembre = -2°C à 5°C. Prévoir manteau chaud, écharpe, gants</li>
+                    <li><strong>Prix:</strong> NYC est cher. Budget ~60-80€ par jour pour nourriture</li>
+                    <li><strong>Sécurité:</strong> La ville est sûre, mais rester vigilant dans certains quartiers la nuit</li>
+                    <li><strong>Photographie:</strong> Léo aura du mal à choisir entre les millions de shots possibles</li>
+                    <li><strong>Musées:</strong> Les billets se prennent en ligne, sinon files d'attente très longues</li>
+                </ul>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-r from-bleu-majorelle to-blue-900 text-white py-16 mt-32">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h3 class="font-playfair text-3xl mb-4">NEW YORK CITY</h3>
+            <p class="font-montserrat font-light mb-6 text-lg">Une aventure urbaine de 4 jours intenses</p>
+            <div class="flex justify-center gap-8 mb-8">
+                <a href="index.html" class="hover:text-jaune-citron">Accueil</a>
+                <a href="roadtrip.html" class="hover:text-jaune-citron">Prochaine Étape</a>
+                <a href="carte-itineraire.html" class="hover:text-jaune-citron">Voir Carte</a>
+            </div>
+            <p class="text-sm text-blue-200">→ Vers le Road Trip (20 Décembre)</p>
+        </div>
+    </footer>
+</body>
+</html>

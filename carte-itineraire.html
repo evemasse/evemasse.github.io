@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinéraire Interactif | AMÉRIPROUT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'bleu-majorelle': '#0476d9',
+                        'jaune-citron': '#f2cb05',
+                        'cream': '#f9f9f9',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        nav {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            box-shadow: 0 8px 32px rgba(4, 118, 217, 0.15);
+        }
+        
+        nav a {
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #f2cb05;
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        #map {
+            width: 100%;
+            height: 80vh;
+            border-radius: 16px;
+            margin-top: 100px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+        
+        .city-marker {
+            width: 28px;
+            height: 28px;
+            background-color: #f2cb05;
+            border: 3px solid #0476d9;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .city-marker:hover {
+            transform: scale(1.3);
+            box-shadow: 0 6px 20px rgba(4, 118, 217, 0.4);
+        }
+        
+        .popup-content {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+        }
+        
+        .popup-content strong {
+            color: #0476d9;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .popup-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            z-index: 400;
+            max-width: 300px;
+        }
+        
+        .control-title {
+            font-family: 'Playfair Display', serif;
+            color: #0476d9;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .legend-marker {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .marker-nyc { background-color: #0476d9; }
+        .marker-roadtrip { background-color: #34d399; }
+        .marker-mexique { background-color: #f2cb05; border: 2px solid #0476d9; }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 py-4 px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-playfair text-2xl font-bold text-white">AMÉRIPROUT</a>
+            <div class="flex gap-8">
+                <a href="index.html">Accueil</a>
+                <a href="participants.html">Participants</a>
+                <a href="carte-itineraire.html">Carte</a>
+                <a href="nyc.html">NYC</a>
+                <a href="roadtrip.html">Road Trip</a>
+                <a href="mexique.html">Mexique</a>
+                <a href="budget.html">Budget</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- CARTE INTERACTIVE -->
+    <main>
+        <div id="map"></div>
+        
+        <!-- CONTRÔLES & LÉGENDE -->
+        <div class="controls">
+            <div class="control-title">Les Étapes du Voyage</div>
+            <div class="legend-item">
+                <div class="legend-marker marker-nyc"></div>
+                <span>NYC (15-19 Déc)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-marker marker-roadtrip"></div>
+                <span>Road Trip (20-30 Déc)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-marker marker-mexique"></div>
+                <span>Mexique (31 Déc - 7 Jan)</span>
+            </div>
+            <hr style="margin: 1rem 0; border: none; border-top: 1px solid #e5e7eb;">
+            <p style="font-size: 0.85rem; color: #999;">Cliquez sur les marqueurs pour plus de détails</p>
+        </div>
+    </main>
+    
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
+    <script>
+        // Initialiser la carte
+        const map = L.map('map').setView([35, -80], 5);
+        
+        // Ajouter le tileset OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19,
+            minZoom: 3
+        }).addTo(map);
+        
+        // Données des villes avec catégories
+        const cities = [
+            { name: 'New York City', lat: 40.7128, lng: -74.0060, date: '15-19 Déc', category: 'nyc', description: 'Train depuis Montréal - Hoboken' },
+            { name: 'Washington DC', lat: 38.9072, lng: -77.0369, date: '20 Déc', category: 'roadtrip', description: 'Monuments historiques' },
+            { name: 'Shenandoah', lat: 38.5216, lng: -78.3519, date: '21 Déc', category: 'roadtrip', description: 'Parc national' },
+            { name: 'Charleston', lat: 32.7765, lng: -79.9311, date: '23 Déc', category: 'roadtrip', description: 'Architecture coloniale' },
+            { name: 'Savannah', lat: 32.0809, lng: -81.0912, date: '25 Déc', category: 'roadtrip', description: 'Squares historiques' },
+            { name: 'Everglades', lat: 25.3861, lng: -80.7314, date: '27 Déc', category: 'roadtrip', description: 'Faune sauvage' },
+            { name: 'Miami', lat: 25.7617, lng: -80.1918, date: '28-30 Déc', category: 'roadtrip', description: 'Plages & Art Deco' },
+            { name: 'Cancun', lat: 21.1619, lng: -87.8554, date: '31 Déc - 5 Jan', category: 'mexique', description: 'Suites Alcatraces' },
+            { name: 'Holbox', lat: 21.5113, lng: -87.3108, date: '5-7 Jan', category: 'mexique', description: 'Île bohème & cenotes' }
+        ];
+        
+        // Créer les marqueurs avec couleurs selon la catégorie
+        const categoryColors = {
+            'nyc': '#0476d9',
+            'roadtrip': '#34d399',
+            'mexique': '#f2cb05'
+        };
+        
+        cities.forEach(city => {
+            const color = categoryColors[city.category] || '#0476d9';
+            const borderColor = city.category === 'mexique' ? '#0476d9' : color;
+            
+            const markerOptions = {
+                icon: L.divIcon({
+                    html: `<div style="width: 28px; height: 28px; background-color: ${color}; border: 3px solid ${borderColor}; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.25); cursor: pointer;"></div>`,
+                    className: '',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14],
+                })
+            };
+            
+            const marker = L.marker([city.lat, city.lng], markerOptions).addTo(map);
+            
+            const popupContent = `
+                <div class="popup-content" style="font-family: 'Montserrat', sans-serif; padding: 10px;">
+                    <strong style="color: #0476d9; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">${city.name}</strong>
+                    <span style="color: #666; font-size: 0.9rem; display: block; margin-bottom: 0.3rem;"><strong>📅 ${city.date}</strong></span>
+                    <span style="color: #999; font-size: 0.85rem;">${city.description}</span>
+                </div>
+            `;
+            
+            marker.bindPopup(popupContent, { maxWidth: 250 });
+            
+            // Animation au survol
+            marker.on('mouseover', function() {
+                this.openPopup();
+            });
+        });
+        
+        // Tracer la ligne de l'itinéraire
+        const itinerary = cities.map(c => [c.lat, c.lng]);
+        L.polyline(itinerary, {
+            color: '#0476d9',
+            weight: 2,
+            opacity: 0.5,
+            dashArray: '5, 5'
+        }).addTo(map);
+    </script>
+    
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-r from-bleu-majorelle to-blue-900 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-sm text-blue-200">© 2025 AMÉRIPROUT CANCOUILLE - Carte Interactive de l'Itinéraire</p>
+        </div>
+    </footer>
+</body>
+</html>

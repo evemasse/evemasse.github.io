@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mexique Magique | AMÉRIPROUT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'bleu-majorelle': '#0476d9',
+                        'jaune-citron': '#f2cb05',
+                        'cream': '#f9f9f9',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        nav {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            box-shadow: 0 8px 32px rgba(4, 118, 217, 0.15);
+        }
+        
+        nav a {
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #f2cb05;
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+            color: white;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .hero-section h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: #0476d9;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #0476d9, #f2cb05);
+            border-radius: 2px;
+        }
+        
+        .flight-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #f2cb05;
+            height: 100%;
+        }
+        
+        .flight-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+        
+        .flight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f2cb05;
+            padding-bottom: 1rem;
+        }
+        
+        .flight-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0476d9;
+        }
+        
+        .flight-date {
+            background: #f2cb05;
+            color: #0476d9;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .flight-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #0476d9;
+        }
+        
+        .detail-value {
+            color: #666;
+        }
+        
+        .accommodation-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 4px solid #0476d9;
+            height: 100%;
+        }
+        
+        .accommodation-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+        
+        .accommodation-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0476d9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .accommodation-location {
+            color: #f2cb05;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .accommodation-desc {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .feature-list li::before {
+            content: '✓ ';
+            color: #f2cb05;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .activity-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            border: 2px solid #f9f9f9;
+        }
+        
+        .activity-item:hover {
+            border-color: #f2cb05;
+            box-shadow: 0 4px 16px rgba(242, 203, 5, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .activity-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .activity-name {
+            font-weight: 600;
+            color: #0476d9;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 py-4 px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-playfair text-2xl font-bold text-white">AMÉRIPROUT</a>
+            <div class="flex gap-8">
+                <a href="index.html">Accueil</a>
+                <a href="participants.html">Participants</a>
+                <a href="carte-itineraire.html">Carte</a>
+                <a href="nyc.html">NYC</a>
+                <a href="roadtrip.html">Road Trip</a>
+                <a href="mexique.html">Mexique</a>
+                <a href="budget.html">Budget</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+        <h1>🏝️ MEXIQUE MAGIQUE</h1>
+        <p class="text-xl font-light text-pink-100">31 Décembre - 7 Janvier | Évasion Tropicale</p>
+    </div>
+    
+    <!-- CONTENU -->
+    <main class="max-w-7xl mx-auto px-6 py-20">
+        
+        <!-- INTRODUCTION -->
+        <section class="mb-20">
+            <div class="bg-pink-50 border-l-4 border-pink-400 p-8 rounded-lg">
+                <h2 class="font-playfair text-3xl text-bleu-majorelle mb-4">Évasion Tropicale Ultime</h2>
+                <p class="text-gray-700 leading-relaxed text-lg">
+                    Les derniers jours du road trip et la transition vers le paradis tropical mexicain. Après une semaine intensément américaine, le groupe échange les routes du continent pour les plages turquoise des Caraïbes. Cancun, Tulum et l'île bohème de Holbox attendent pour une évasion remplie de cenotes cristallins, de cuisine exquise, et de réveillon du Nouvel An inoubliable.
+                </p>
+            </div>
+        </section>
+        
+        <!-- VOLS -->
+        <section class="mb-20">
+            <h2 class="section-title">Vols & Transports</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                
+                <!-- ALLER -->
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <div class="flight-title">Aller</div>
+                        <span class="flight-date">31 DÉC</span>
+                    </div>
+                    <div class="flight-details">
+                        <div class="detail-row">
+                            <span class="detail-label">De:</span>
+                            <span class="detail-value">Miami (MIA)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Vers:</span>
+                            <span class="detail-value">Cancun (CUN)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Compagnie:</span>
+                            <span class="detail-value">American Airlines</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Référence:</span>
+                            <span class="detail-value">UMJOMW</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Durée:</span>
+                            <span class="detail-value">3h30</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Horaire:</span>
+                            <span class="detail-value">À confirmer</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RETOUR -->
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <div class="flight-title">Retour</div>
+                        <span class="flight-date">7 JAN</span>
+                    </div>
+                    <div class="flight-details">
+                        <div class="detail-row">
+                            <span class="detail-label">De:</span>
+                            <span class="detail-value">Cancun (CUN)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Vers:</span>
+                            <span class="detail-value">Toronto (YYZ)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Compagnie:</span>
+                            <span class="detail-value">Flair Airlines</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Référence:</span>
+                            <span class="detail-value">P663EV</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Durée:</span>
+                            <span class="detail-value">4h00</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Horaire:</span>
+                            <span class="detail-value">À confirmer</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- HÉBERGEMENTS -->
+        <section class="mb-20">
+            <h2 class="section-title">Hébergements de Luxe</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                
+                <!-- SUITES ALCATRACES -->
+                <div class="accommodation-card">
+                    <div class="accommodation-title">Suites Alcatraces</div>
+                    <div class="accommodation-location">📍 Cancun - Zone Hôtelière</div>
+                    <div class="accommodation-desc">
+                        Resort de luxe face à la mer des Caraïbes. Architecture élégante, piscines infinies, plage privée. Idéal pour les premiers jours de détente après le road trip.
+                    </div>
+                    <ul class="feature-list">
+                        <li>Suites avec vue océan</li>
+                        <li>Accès plage privée</li>
+                        <li>Piscine chauffée & SPA</li>
+                        <li>Restaurants gastronomiques</li>
+                        <li>Service concierge 24/24</li>
+                    </ul>
+                </div>
+                
+                <!-- HOTEL HOLBOX -->
+                <div class="accommodation-card">
+                    <div class="accommodation-title">Hotel Holbox</div>
+                    <div class="accommodation-location">📍 Holbox Island - L'Île Bohème</div>
+                    <div class="accommodation-desc">
+                        Boutique hotel raffiné sur l'île préservée de Holbox. Accès aux cenotes cachés, plages vierges, écosystème marin unique. Évasion loin des foules touristiques.
+                    </div>
+                    <ul class="feature-list">
+                        <li>Chambres de style bohème</li>
+                        <li>Terrasse vue sur baie</li>
+                        <li>Accès cenotes & lacs salés</li>
+                        <li>Restaurant fruits de mer frais</li>
+                        <li>Excursions incluses</li>
+                    </ul>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- ACTIVITÉS -->
+        <section class="mb-20">
+            <h2 class="section-title">Activités à Découvrir</h2>
+            <div class="activities-grid mt-16">
+                <div class="activity-item">
+                    <div class="activity-emoji">🏊</div>
+                    <div class="activity-name">Cenotes</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🤿</div>
+                    <div class="activity-name">Plongée & Snorkling</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🏖️</div>
+                    <div class="activity-name">Plages Blanches</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🐟</div>
+                    <div class="activity-name">Pêche aux Bioluminescences</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🚤</div>
+                    <div class="activity-name">Excursions Bateau</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🐠</div>
+                    <div class="activity-name">Réserve Marine</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🌴</div>
+                    <div class="activity-name">Jungle Trek</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🍹</div>
+                    <div class="activity-name">Cocktails Tropicaux</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🎶</div>
+                    <div class="activity-name">Soirée Nouvel An</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🌅</div>
+                    <div class="activity-name">Couchers de Soleil</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🏛️</div>
+                    <div class="activity-name">Ruines Mayas</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-emoji">🎨</div>
+                    <div class="activity-name">Marché Local</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ITINÉRAIRE DÉTAILLÉ -->
+        <section class="mb-20">
+            <h2 class="section-title">Les 8 Jours au Mexique</h2>
+            <div class="max-w-3xl mx-auto mt-16 space-y-6">
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-400">
+                    <h4 class="text-pink-600 font-bold text-lg mb-2">31 Déc - Jour 1: Arrivée à Cancun</h4>
+                    <p class="text-gray-700">Vol de Miami en fin de matinée. Installation à Suites Alcatraces. Après-midi libre: plage, spa, détente. Soirée spéciale: réveillon du Nouvel An sur la plage avec champagne, feu d'artifice, et célébration inoubliable.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-400">
+                    <h4 class="text-pink-600 font-bold text-lg mb-2">1 Jan - Jour 2: Repos & Détente</h4>
+                    <p class="text-gray-700">Matinée slow, brunch tardif à la piscine, massage au SPA, lectures. Après-midi: exploration de la zone hôtelière de Cancun, shopping, restaurants. Soirée tranquille (recovery après la fête).</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-400">
+                    <h4 class="text-pink-600 font-bold text-lg mb-2">2 Jan - Jour 3: Cenotes & Jungle</h4>
+                    <p class="text-gray-700">Journée d'aventure! Visite de plusieurs cenotes: swim in crystal clear waters, snorkeling, jungle walk. Plongée dans les cavernes souterraines. Retour à Cancun pour dîner.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-400">
+                    <h4 class="text-pink-600 font-bold text-lg mb-2">3 Jan - Jour 4: Tulum & Ruines Mayas</h4>
+                    <p class="text-gray-700">Road trip vers la côte sud: visite des ruines mayas de Tulum surplombant les falaises turquoise. Plage de Tulum, shopping artisanal, dîner fruits de mer face à la mer.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-400">
+                    <h4 class="text-pink-600 font-bold text-lg mb-2">4 Jan - Jour 5: Route vers Holbox</h4>
+                    <p class="text-gray-700">Transfert vers l'île bohème de Holbox (ferry depuis Chiquila). Installation à Hotel Holbox. Exploration de l'île: pas de voitures, ambiance tranquille. Coucher de soleil magique, dîner au restaurant avec pieds nus dans le sable.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-400">
+                    <h4 class="text-pink-600 font-bold text-lg mb-2">5 Jan - Jour 6: Holbox Aventure</h4>
+                    <p class="text-gray-700">Excursion bateau vers l'île des oiseaux, pêche aux bioluminescences (phénomène magique la nuit), snorkeling dans lacs salés. Ambiance bohème: musique en live, danse pieds nus sur la plage.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-400">
+                    <h4 class="text-pink-600 font-bold text-lg mb-2">6 Jan - Jour 7: Détente Finale</h4>
+                    <p class="text-gray-700">Dernier jour de détente à Holbox. Yoga matinal sur la plage, massage, lecture sous les palmiers. Lunch léger, exploration des petites boutiques bohèmes. Soirée tranquille pour préparer le départ.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-pink-400">
+                    <h4 class="text-pink-600 font-bold text-lg mb-2">7 Jan - Jour 8: Retour à Toronto</h4>
+                    <p class="text-gray-700">Transfert vers Cancun (ferry & route). Vol Flair Airlines vers Toronto dans l'après-midi. Fin de l'aventure épique. Retour en famille avec des souvenirs inoubliables et des photos extraordinaires.</p>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- CONSEILS MEXIQUE -->
+        <section class="mb-20">
+            <div class="bg-yellow-50 border-l-4 border-jaune-citron p-8 rounded-lg">
+                <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">💡 Conseils pour le Mexique</h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li><strong>Visa:</strong> Canadiens & Français: pas de visa, 180 jours automatiques</li>
+                    <li><strong>Argent:</strong> Pesos mexicains (MXN). Taux: 1 EUR ≈ 17-20 MXN</li>
+                    <li><strong>Météo:</strong> Décembre-Janvier: 25-28°C, sec et parfait. Pas de pluie</li>
+                    <li><strong>Soleil:</strong> Protection solaire impérative. SPF50 minimum</li>
+                    <li><strong>Eau:</strong> Ne pas boire l'eau du robinet. Eau en bouteille à tous les hôtels</li>
+                    <li><strong>Cenotes:</strong> Prévoir maillot de bain et serviette. Cristal clair = eau extrêmement froide!</li>
+                    <li><strong>Holbox:</strong> Petite île = pas de banque. Prendre de l'argent à Cancun</li>
+                    <li><strong>Photos:</strong> Léo va faire un crime : les couchers de soleil sont dingues</li>
+                    <li><strong>Réveillon:</strong> Réserver restaurant/activités à l'avance, tout est full</li>
+                </ul>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-16 mt-32">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h3 class="font-playfair text-3xl mb-4">MEXIQUE MAGIQUE</h3>
+            <p class="font-montserrat font-light mb-6 text-lg">8 jours d'évasion tropicale ultime</p>
+            <div class="flex justify-center gap-8 mb-8">
+                <a href="roadtrip.html" class="hover:text-jaune-citron">Étape Précédente</a>
+                <a href="budget.html" class="hover:text-jaune-citron">Budget Total</a>
+                <a href="carte-itineraire.html" class="hover:text-jaune-citron">Voir Carte</a>
+            </div>
+            <p class="text-sm text-pink-200">← Retour à Toronto le 7 Janvier</p>
+        </div>
+    </footer>
+</body>
+</html>

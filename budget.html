@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget & Infos | AMÉRIPROUT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'bleu-majorelle': '#0476d9',
+                        'jaune-citron': '#f2cb05',
+                        'cream': '#f9f9f9',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        nav {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            box-shadow: 0 8px 32px rgba(4, 118, 217, 0.15);
+        }
+        
+        nav a {
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #f2cb05;
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            color: white;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: #0476d9;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #0476d9, #f2cb05);
+            border-radius: 2px;
+        }
+        
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .budget-table th {
+            background: linear-gradient(135deg, #0476d9 0%, #034aa3 100%);
+            color: white;
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .budget-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .budget-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .budget-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .category-name {
+            font-weight: 600;
+            color: #0476d9;
+        }
+        
+        .amount {
+            font-weight: 600;
+            color: #f2cb05;
+            font-size: 1.05rem;
+        }
+        
+        .budget-total {
+            background: linear-gradient(135deg, rgba(4, 118, 217, 0.1), rgba(242, 203, 5, 0.1));
+            border-top: 2px solid #f2cb05;
+            border-bottom: 2px solid #f2cb05;
+        }
+        
+        .budget-total td {
+            padding: 18px 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .budget-total .category-name {
+            color: #0476d9;
+        }
+        
+        .budget-total .amount {
+            color: #0476d9;
+            font-size: 1.3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 4px solid #0476d9;
+        }
+        
+        .stat-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+        
+        .stat-card.yellow {
+            border-top-color: #f2cb05;
+        }
+        
+        .stat-card.green {
+            border-top-color: #34d399;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0476d9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        
+        .comparison-item:last-child {
+            border-bottom: none;
+        }
+        
+        .comparison-label {
+            font-weight: 600;
+            color: #0476d9;
+        }
+        
+        .comparison-value {
+            font-weight: 700;
+            color: #666;
+        }
+        
+        .currency {
+            color: #f2cb05;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 py-4 px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-playfair text-2xl font-bold text-white">AMÉRIPROUT</a>
+            <div class="flex gap-8">
+                <a href="index.html">Accueil</a>
+                <a href="participants.html">Participants</a>
+                <a href="carte-itineraire.html">Carte</a>
+                <a href="nyc.html">NYC</a>
+                <a href="roadtrip.html">Road Trip</a>
+                <a href="mexique.html">Mexique</a>
+                <a href="budget.html">Budget</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- HERO SECTION -->
+    <div class="hero-section">
+        <h1>💰 BUDGET & INFOS</h1>
+        <p class="text-xl font-light text-blue-100">Planification Financière | Voyage de 22 Jours</p>
+    </div>
+    
+    <!-- CONTENU -->
+    <main class="max-w-7xl mx-auto px-6 py-20">
+        
+        <!-- STATISTIQUES CLÉS -->
+        <section class="mb-20">
+            <h2 class="section-title">L'Aventure en Chiffres</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mt-16">
+                <div class="stat-card">
+                    <div class="stat-value">22</div>
+                    <div class="stat-label">Jours de Voyage<br>15 Déc - 7 Jan</div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Aventuriers<br>Léo, Sarah, Emma, Palmyre, Eve</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-value">3200+</div>
+                    <div class="stat-label">Kilomètres Parcourus<br>En van sur les routes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">Villes Visitées<br>NYC, Washington, Charleston, Savannah, Miami, Cancun</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- BUDGET DÉTAILLÉ -->
+        <section class="mb-20">
+            <h2 class="section-title">Budget Détaillé par Personne</h2>
+            <div class="overflow-x-auto mt-16">
+                <table class="budget-table">
+                    <thead>
+                        <tr>
+                            <th>Catégorie de Dépense</th>
+                            <th>Montant (€)</th>
+                            <th>Détails</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="category-name">✈️ Vols Internationaux</td>
+                            <td class="amount">520 €</td>
+                            <td>Montréal-NYC / Miami-Cancun / Cancun-Toronto</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">🚂 Train Montréal-NYC</td>
+                            <td class="amount">180 €</td>
+                            <td>Amtrak Northeast Regional (12h)</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">🚐 Location Van Cruise America</td>
+                            <td class="amount">450 €</td>
+                            <td>11 jours, 2500 km parcourus</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">⛽ Essence & Péages</td>
+                            <td class="amount">150 €</td>
+                            <td>Carburant + péages USA (I-95, etc.)</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">🏨 Hébergements USA</td>
+                            <td class="amount">380 €</td>
+                            <td>Hoboken (4n) + hôtels route trip (4n)</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">🏝️ Hébergements Mexique</td>
+                            <td class="amount">410 €</td>
+                            <td>Suites Alcatraces (3n) + Hotel Holbox (4n)</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">🍽️ Repas & Restaurants</td>
+                            <td class="amount">280 €</td>
+                            <td>Divers repas, brunch, restaurants gastronomiques</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">🎭 Activités & Attractions</td>
+                            <td class="amount">185 €</td>
+                            <td>Musées NYC, Cenotes, excursions, entrées</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">🛂 Assurances Voyage</td>
+                            <td class="amount">65 €</td>
+                            <td>Couverture complète 22 jours</td>
+                        </tr>
+                        <tr>
+                            <td class="category-name">💳 Divers & Pourboires</td>
+                            <td class="amount">75 €</td>
+                            <td>Taxis, pourboires, dépenses impromptues</td>
+                        </tr>
+                        <tr class="budget-total">
+                            <td class="category-name">💰 TOTAL PAR PERSONNE</td>
+                            <td class="amount">2695 €</td>
+                            <td><strong>Voyage Complet 22 Jours</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- BUDGET TOTAL -->
+        <section class="mb-20">
+            <h2 class="section-title">Budget Collectif</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+                <div class="stat-card">
+                    <div class="stat-value">2695 €</div>
+                    <div class="stat-label">Par Personne</div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-value">13475 €</div>
+                    <div class="stat-label">Pour 5 Personnes</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-value">2695 €</div>
+                    <div class="stat-label">Coût Moyen / Jour</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- COMPARAISON AVEC VACANCES STANDARDS -->
+        <section class="mb-20">
+            <h2 class="section-title">Comparaison avec Autres Vacances</h2>
+            <div class="max-w-2xl mx-auto mt-16">
+                <div class="comparison-item">
+                    <span class="comparison-label">AMÉRIPROUT (22 jours)</span>
+                    <span class="comparison-value"><span class="currency">€</span> 2695</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-label">Resort All-Inclusive Mexique (14 jours)</span>
+                    <span class="comparison-value"><span class="currency">€</span> 2100</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-label">Croisiéristes Caraïbes (7 jours)</span>
+                    <span class="comparison-value"><span class="currency">€</span> 1800</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-label">Europe Budget Backpacking (3 semaines)</span>
+                    <span class="comparison-value"><span class="currency">€</span> 2400</span>
+                </div>
+                <div class="comparison-item">
+                    <span class="comparison-label">Séjour ski Alpes (10 jours)</span>
+                    <span class="comparison-value"><span class="currency">€</span> 1900</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- INFORMATIONS PRATIQUES -->
+        <section class="mb-20">
+            <h2 class="section-title">Informations Pratiques</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                
+                <div class="bg-white rounded-12 p-8 rounded-lg shadow-md">
+                    <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">📋 Documents Nécessaires</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li>✓ Passeport valide 6+ mois</li>
+                        <li>✓ Visa ETATS-UNIS (pour Français)</li>
+                        <li>✓ Assurance voyage internationale</li>
+                        <li>✓ Permis de conduire international</li>
+                        <li>✓ Cartes de crédit (Visa/Mastercard)</li>
+                        <li>✓ Confirmation hôtels/vols</li>
+                        <li>✓ Numéros d'urgence</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-12 p-8 rounded-lg shadow-md">
+                    <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">💵 Informations Monétaires</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li>🇺🇸 USA: Dollar USD (1€ ≈ 1.10$)</li>
+                        <li>🇲🇽 Mexique: Peso MXN (1€ ≈ 18-20 MXN)</li>
+                        <li>💳 Cartes de crédit acceptées partout</li>
+                        <li>🏦 Retrait ATM: frais minimes</li>
+                        <li>💱 Pas de change avant départ</li>
+                        <li>🧾 Pourboires: 15-20% aux USA</li>
+                        <li>🎁 Taxes incluses aux USA</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-12 p-8 rounded-lg shadow-md">
+                    <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">🌍 Conditions d'Entrée</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li>🇨🇦 Canadiens: ESTA USA (20$)</li>
+                        <li>🇫🇷 Français: ESTA USA (20$)</li>
+                        <li>🇲🇽 Mexique: Aucun visa requis</li>
+                        <li>📱 Durée: 180 jours automatiques</li>
+                        <li>🏨 Preuve d'hébergement conseillée</li>
+                        <li>💰 Preuve de fonds financiers</li>
+                        <li>🎫 Billet retour obligatoire</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-12 p-8 rounded-lg shadow-md">
+                    <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">⚠️ Points Importants</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li>❄️ Hiver: Vêtements chauds (NYC, -2°C)</li>
+                        <li>☀️ Été tropical: SPF50 au Mexique</li>
+                        <li>💊 Assurance rapatriement obligatoire</li>
+                        <li>🚗 Permis international pour van</li>
+                        <li>🏥 Vaccins: À consulter avec médecin</li>
+                        <li>📞 Téléphones: Plan international recommandé</li>
+                        <li>🎒 Limitation bagage: 23kg par personne</li>
+                    </ul>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- PAIEMENT & LOGISTIQUE -->
+        <section class="mb-20">
+            <div class="bg-blue-50 border-l-4 border-bleu-majorelle p-8 rounded-lg">
+                <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">🏦 Paiement & Logistique</h3>
+                <div class="space-y-4 text-gray-700">
+                    <p>
+                        <strong>Répartition des frais:</strong> La majorité des hébergements et transporteurs offrent des plans de paiement sans frais. 
+                        Un acompte de 30-50% est généralement requis 60 jours avant le départ.
+                    </p>
+                    <p>
+                        <strong>Réservations:</strong> Hôtels confirmés via Trivago & Booking.com avec assurance annulation. Vols confirmés via booking sites officiels.
+                    </p>
+                    <p>
+                        <strong>Devises:</strong> Prélever 500$ USD en espèces dès arrivée, et 5000 MXN pour le Mexique. Le reste via cartes de crédit.
+                    </p>
+                    <p>
+                        <strong>Partage des coûts:</strong> Suggéré de partager l'essence et certaines activités de groupe pour optimiser.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-r from-bleu-majorelle to-blue-900 text-white py-16 mt-32">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h3 class="font-playfair text-3xl mb-4">AMÉRIPROUT CANCOUILLE</h3>
+            <p class="font-montserrat font-light mb-6 text-lg">Budget Total: 13 475 € pour 5 Aventuriers</p>
+            <div class="flex justify-center gap-8 mb-8">
+                <a href="index.html" class="hover:text-jaune-citron">Accueil</a>
+                <a href="participants.html" class="hover:text-jaune-citron">Participants</a>
+                <a href="carte-itineraire.html" class="hover:text-jaune-citron">Carte Interactive</a>
+            </div>
+            <p class="text-sm text-blue-200">Une aventure épique planifiée jusqu'au moindre détail</p>
+        </div>
+    </footer>
+</body>
+</html>
