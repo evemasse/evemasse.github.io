@@ -58,9 +58,89 @@
         footer { border-top: 1px solid rgba(255,255,255,0.1); }
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* Convertisseur de monnaie */
+        .currency-converter {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(178, 34, 52, 0.5);
+            padding: 1.5rem;
+            width: 280px;
+        }
+        .currency-converter h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: #B22234;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .currency-converter input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px;
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .currency-converter input:focus {
+            outline: none;
+            border-color: #B22234;
+            background: rgba(178, 34, 52, 0.1);
+        }
+        .currency-converter .result {
+            background: linear-gradient(135deg, rgba(178, 34, 52, 0.2), rgba(60, 59, 110, 0.2));
+            padding: 12px;
+            text-align: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+        .currency-converter .rate {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+        .converter-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            background: #B22234;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .converter-toggle:hover { transform: scale(1.1); }
+        .currency-converter.hidden { display: none; }
     </style>
 </head>
 <body>
+    
+    <!-- CONVERTISSEUR MXN → EUR -->
+    <div class="currency-converter hidden" id="converter">
+        <h4>💱 MXN → EUR</h4>
+        <input type="number" id="mxn-input" placeholder="Montant en Pesos (MXN)" oninput="convertCurrency()">
+        <div class="result" id="eur-result">0.00 €</div>
+        <div class="rate">Taux: 1 MXN = <span id="rate-display">0.054</span> EUR</div>
+    </div>
+    <button class="converter-toggle" id="toggle-btn" onclick="toggleConverter()">💱</button>
     
     <!-- NAVIGATION -->
     <nav class="fixed top-0 w-full z-50 py-5 px-8">
@@ -243,6 +323,23 @@
                 radius: 8, fillColor: '#B22234', color: '#fff', weight: 2, fillOpacity: 0.9
             }).addTo(map).bindPopup(`<strong style="color:#B22234">${loc.name}</strong>`);
         });
+        
+        // Convertisseur de monnaie MXN → EUR
+        const MXN_EUR_RATE = 0.054;
+        document.getElementById('rate-display').textContent = MXN_EUR_RATE;
+        
+        function convertCurrency() {
+            const mxn = parseFloat(document.getElementById('mxn-input').value) || 0;
+            const eur = (mxn * MXN_EUR_RATE).toFixed(2);
+            document.getElementById('eur-result').textContent = eur + ' €';
+        }
+        
+        function toggleConverter() {
+            const converter = document.getElementById('converter');
+            const btn = document.getElementById('toggle-btn');
+            converter.classList.toggle('hidden');
+            btn.style.display = converter.classList.contains('hidden') ? 'flex' : 'none';
+        }
     </script>
 </body>
 </html>
