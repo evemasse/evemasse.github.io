@@ -3,540 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Road Trip Van | AMÉRIPROUT</title>
+    <title>ROAD TRIP | AMÉRICACA</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Leaflet CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
     
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'playfair': ['Playfair Display', 'serif'],
-                        'montserrat': ['Montserrat', 'sans-serif'],
-                    },
-                    colors: {
-                        'bleu-majorelle': '#5B9FB5',
-                        'jaune-citron': '#F4D9A6',
-                        'cream': '#FAFBF8',
-                    },
-                }
-            }
+            theme: { extend: { colors: { 'usa-red': '#B22234', 'usa-blue': '#3C3B6E', 'dark': '#0a0a0a' } } }
         }
     </script>
     
     <style>
-        * {
-            font-family: 'Montserrat', sans-serif;
-        }
+        * { font-family: 'Space Grotesk', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: #0a0a0a; color: white; overflow-x: hidden; }
         
-        h1, h2, h3, h4 {
-            font-family: 'Playfair Display', serif;
-        }
+        nav { background: transparent; backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        nav a { color: white; font-weight: 500; transition: all 0.3s ease; text-decoration: none; letter-spacing: 0.5px; }
+        nav a:hover { color: #B22234; }
+        .nav-pill { background: rgba(178, 34, 52, 0.2); border: 1px solid rgba(178, 34, 52, 0.5); padding: 8px 16px; border-radius: 100px; font-size: 0.85rem; transition: all 0.3s ease; }
+        .nav-pill:hover { background: #B22234; color: white !important; transform: scale(1.05); }
         
-        body {
-            background-color: #f9f9f9;
-        }
+        .page-hero { min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding-top: 100px; }
+        .page-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 50% 50%, rgba(178, 34, 52, 0.15) 0%, transparent 60%); }
+        .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 15vw, 10rem); line-height: 0.9; background: linear-gradient(135deg, #fff 0%, #B22234 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; }
+        .page-subtitle { font-size: 1.2rem; color: rgba(255,255,255,0.5); margin-top: 1rem; letter-spacing: 4px; text-transform: uppercase; }
         
-        nav {
-            background: linear-gradient(135deg, #5B9FB5 0%, #4A7A92 100%);
-            box-shadow: 0 8px 32px rgba(91, 159, 181, 0.15);
-        }
+        .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 6vw, 4rem); letter-spacing: 2px; }
+        .section-title span { color: #B22234; }
         
-        nav a {
-            color: white;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            position: relative;
-        }
+        .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 2rem; transition: all 0.4s ease; }
+        .card:hover { background: rgba(255,255,255,0.06); border-color: rgba(178, 34, 52, 0.3); transform: translateY(-4px); }
+        .card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; color: #B22234; margin-bottom: 0.5rem; }
         
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #F4D9A6;
-            transition: width 0.3s ease;
-        }
+        .route-step { display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .route-step:last-child { border-bottom: none; }
+        .route-number { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #B22234; min-width: 50px; }
+        .route-city { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1px; }
+        .route-date { color: rgba(255,255,255,0.4); font-size: 0.9rem; }
         
-        nav a:hover::after {
-            width: 100%;
-        }
+        #map-container { height: 500px; border: 1px solid rgba(255,255,255,0.1); filter: grayscale(70%) contrast(1.1); transition: all 0.5s ease; }
+        #map-container:hover { filter: grayscale(20%) contrast(1); }
         
-        .hero-section {
-            background: linear-gradient(135deg, #5B9FB5 0%, #4A7A92 100%);
-            color: white;
-            padding: 6rem 2rem 4rem;
-            text-align: center;
-            margin-top: 80px;
-        }
+        .btn-primary { background: linear-gradient(135deg, #B22234 0%, #8B1A28 100%); color: white; padding: 16px 40px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; transition: all 0.4s ease; text-decoration: none; display: inline-block; }
+        .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(178, 34, 52, 0.4); }
         
-        .hero-section h1 {
-            font-size: clamp(2rem, 8vw, 4rem);
-            margin-bottom: 1rem;
-        }
-        
-        .section-title {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            color: #5B9FB5;
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #5B9FB5, #F4D9A6);
-            border-radius: 2px;
-        }
-        
-        .info-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-        
-        .info-card:hover {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            transform: translateY(-4px);
-        }
-        
-        .info-card h3 {
-            color: #5B9FB5;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-        
-        .badge {
-            display: inline-block;
-            background-color: #F4D9A6;
-            color: #5B9FB5;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .stage-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border-left: 4px solid #34d399;
-        }
-        
-        .stage-card:hover {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            transform: translateX(4px);
-        }
-        
-        .stage-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .stage-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #5B9FB5;
-        }
-        
-        .stage-day {
-            background: #34d399;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        
-        .stage-distance {
-            color: #F4D9A6;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .stage-description {
-            color: #666;
-            line-height: 1.7;
-            margin-bottom: 1rem;
-        }
-        
-        .highlights {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e5e7eb;
-        }
-        
-        .highlight {
-            font-size: 0.9rem;
-            color: #555;
-        }
-        
-        .highlight strong {
-            color: #5B9FB5;
-        }
-        
-        #map-container {
-            height: 500px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            margin-top: 2rem;
-        }
+        .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(178, 34, 52, 0.5), transparent); margin: 4rem 0; }
+        footer { border-top: 1px solid rgba(255,255,255,0.1); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
+    
     <!-- NAVIGATION -->
-    <nav class="fixed top-0 w-full z-50 py-4 px-8">
+    <nav class="fixed top-0 w-full z-50 py-5 px-8">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="font-playfair text-2xl font-bold text-white">AMÉRIPROUT</a>
+            <a href="index.html" style="font-family: 'Bebas Neue', sans-serif;" class="text-2xl tracking-wider">AMÉRICACA</a>
             <div class="flex gap-8 items-center">
-                <a href="nyc.html" class="font-playfair">NYC</a>
-                <a href="roadtrip.html" class="font-playfair">Road Trip</a>
-                <a href="mexique.html" class="font-playfair">Mexique</a>
-                <span class="text-white/30">|</span>
-                <a href="carte-itineraire.html" class="bg-white/20 px-3 py-1 rounded-full text-sm">🗺️ Carte</a>
-                <a href="participants.html" class="bg-white/20 px-3 py-1 rounded-full text-sm">👥 Équipe</a>
-                <a href="budget.html" class="bg-white/20 px-3 py-1 rounded-full text-sm">💰 Budget</a>
+                <a href="nyc.html" class="text-sm">NYC</a>
+                <a href="roadtrip.html" class="text-sm" style="color: #B22234;">ROAD TRIP</a>
+                <a href="mexique.html" class="text-sm">MEXIQUE</a>
+                <span class="text-white/20">|</span>
+                <a href="carte-itineraire.html" class="nav-pill">🗺️ CARTE</a>
+                <a href="participants.html" class="nav-pill">👥 TEAM</a>
+                <a href="budget.html" class="nav-pill">💰 BUDGET</a>
             </div>
         </div>
     </nav>
     
-    <!-- HERO SECTION -->
-    <div class="hero-section">
-        <h1>🚐 ROAD TRIP VAN</h1>
-        <p class="text-xl font-light text-green-100">20-30 Décembre | La Côte Est en 10 Jours</p>
-        <!-- Météo en direct des étapes principales -->
-        <div class="mt-6 flex flex-wrap justify-center gap-4">
-            <div class="inline-flex items-center gap-3 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm">
-                <span>🏙️ Washington</span>
-                <span class="font-bold" id="temp-washington">--°C</span>
-            </div>
-            <div class="inline-flex items-center gap-3 bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm">
-                <span>🌴 Miami</span>
-                <span class="font-bold" id="temp-miami">--°C</span>
-            </div>
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="relative z-10 text-center px-6">
+            <p class="text-sm tracking-widest uppercase mb-4" style="color: #B22234;">🚐 Étape 2</p>
+            <h1 class="page-title">ROAD<br>TRIP</h1>
+            <p class="page-subtitle">20-30 Décembre · La Côte Est en Van</p>
         </div>
-    </div>
-    
-    <!-- MAP SECTION -->
-    <section class="max-w-7xl mx-auto px-6 py-12">
-        <h2 class="section-title mb-8">Parcours du Road Trip - Washington à Miami</h2>
-        <div id="map-container"></div>
     </section>
     
-    <!-- CONTENU -->
-    <main class="max-w-7xl mx-auto px-6 py-20">
-        
-        <!-- INTRODUCTION -->
-        <section class="mb-20">
-            <div class="bg-green-50 border-l-4 border-green-400 p-8 rounded-lg">
-                <h2 class="font-playfair text-3xl text-bleu-majorelle mb-4">L'Aventure sur les Routes</h2>
-                <p class="text-gray-700 leading-relaxed text-lg">
-                    Après NYC, le groupe monte à bord d'un van Cruise America pour une épopée légendaire le long de la côte Est. Dix jours de route libre, de rencontres locales, de paysages naturels spectaculaires et de nuits étoilées. De la capitale fédérale aux bayous de la Louisiane, en passant par les montagnes bleues et les plages de Floride, ce road trip est l'essence même de l'Amérique.
-                </p>
+    <!-- CARTE -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 reveal">
+                <h2 class="section-title">LE <span>PARCOURS</span></h2>
             </div>
-        </section>
-        
-        <!-- INFORMATIONS VAN -->
-        <section class="mb-20">
-            <h2 class="section-title">Détails de la Location</h2>
-            <div class="max-w-2xl mx-auto mt-16">
-                <div class="info-card">
-                    <span class="badge">🚐 VAN DE LUXE</span>
-                    <h3>Cruise America</h3>
-                    <div class="space-y-3">
-                        <p><strong>Type:</strong> RV/Van Aménagé Spacieux</p>
-                        <p><strong>Capacité:</strong> 5 personnes</p>
-                        <p><strong>Confort:</strong> Lit, cuisine, salle de bain privative</p>
-                        <p><strong>Durée:</strong> 11 jours (19 Déc - 30 Déc)</p>
-                        <p><strong>Téléphone:</strong> 800-671-8042</p>
-                        <p><strong>Distance:</strong> ~2500 km</p>
-                        <p class="text-sm text-gray-600 mt-4 bg-blue-50 p-3 rounded">Confort optimal pour les longs trajets. Stationnement dans des campings établis ou sur le bord des routes pittoresques.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- LES 6 ÉTAPES -->
-        <section class="mb-20">
-            <h2 class="section-title">Les 6 Étapes du Voyage</h2>
-            <div class="max-w-3xl mx-auto mt-16">
-                
-                <!-- ÉTAPE 1 -->
-                <div class="stage-card">
-                    <div class="stage-header">
-                        <div class="stage-name">1. Washington DC</div>
-                        <span class="stage-day">Jour 1-2</span>
-                    </div>
-                    <div class="stage-distance">⏱️ 6 heures de NYC</div>
-                    <div class="stage-description">
-                        La capitale fédérale nous accueille avec ses monuments iconiques. Musées gratuits du Smithsonian, Lincoln Memorial au coucher de soleil, promenade sur le National Mall. Déjeuner local, exploration du quartier historique de Georgetown.
-                    </div>
-                    <div class="highlights">
-                        <div class="highlight"><strong>🏛️</strong> Capitol Building</div>
-                        <div class="highlight"><strong>🗿</strong> Lincoln Memorial</div>
-                        <div class="highlight"><strong>🎨</strong> Musées Smithsonian</div>
-                        <div class="highlight"><strong>🏞️</strong> National Mall</div>
-                    </div>
-                </div>
-                
-                <!-- ÉTAPE 2 -->
-                <div class="stage-card">
-                    <div class="stage-header">
-                        <div class="stage-name">2. Shenandoah National Park</div>
-                        <span class="stage-day">Jour 2-3</span>
-                    </div>
-                    <div class="stage-distance">⏱️ 2 heures de DC</div>
-                    <div class="stage-description">
-                        Plongée dans la nature sauvage des Appalaches. Skyline Drive serpente à travers les montagnes Blue Ridge avec vues spectaculaires. Randonnées parmi les forêts de pins, lacs de montagne cristallins. Camping dans le parc, nuit sous les étoiles.
-                    </div>
-                    <div class="highlights">
-                        <div class="highlight"><strong>⛰️</strong> Skyline Drive</div>
-                        <div class="highlight"><strong>🥾</strong> Randonnées Alpestres</div>
-                        <div class="highlight"><strong>🌲</strong> Forêts Anciennes</div>
-                        <div class="highlight"><strong>⭐</strong> Nuit Étoilée</div>
-                    </div>
-                </div>
-                
-                <!-- ÉTAPE 3 -->
-                <div class="stage-card">
-                    <div class="stage-header">
-                        <div class="stage-name">3. Charleston</div>
-                        <span class="stage-day">Jour 3-4</span>
-                    </div>
-                    <div class="stage-distance">⏱️ 8 heures de Shenandoah</div>
-                    <div class="stage-description">
-                        La perle du Sud ! Architecture coloniale, maisons aux couleurs pastel, promenade historique Battery Park face à l'océan. Cuisine Lowcountry (fruits de mer frais), atmosphère romantique des rues pavées, galeries d'art contemporain.
-                    </div>
-                    <div class="highlights">
-                        <div class="highlight"><strong>🏛️</strong> Architecture Coloniale</div>
-                        <div class="highlight"><strong>🍤</strong> Cuisine Lowcountry</div>
-                        <div class="highlight"><strong>🌅</strong> Battery Park</div>
-                        <div class="highlight"><strong>🎨</strong> Galeries d'Art</div>
-                    </div>
-                </div>
-                
-                <!-- ÉTAPE 4 -->
-                <div class="stage-card">
-                    <div class="stage-header">
-                        <div class="stage-name">4. Savannah</div>
-                        <span class="stage-day">Jour 4-5</span>
-                    </div>
-                    <div class="stage-distance">⏱️ 2 heures de Charleston</div>
-                    <div class="stage-description">
-                        Une ville de rêve avec ses squares historiques ombragés de chênes, cafés bohèmes, fontaines anciennes. Rivière Savannah avec ses bateaux à roues, gastronomie du Sud (BBQ, beignets), vie culturelle riche. Nuit itinérante sur les routes.
-                    </div>
-                    <div class="highlights">
-                        <div class="highlight"><strong>🌳</strong> Squares Historiques</div>
-                        <div class="highlight"><strong>☕</strong> Cafés Bohèmes</div>
-                        <div class="highlight"><strong>🎭</strong> Vie Culturelle</div>
-                        <div class="highlight"><strong>🥩</strong> BBQ du Sud</div>
-                    </div>
-                </div>
-                
-                <!-- ÉTAPE 5 -->
-                <div class="stage-card">
-                    <div class="stage-header">
-                        <div class="stage-name">5. Everglades</div>
-                        <span class="stage-day">Jour 5-6</span>
-                    </div>
-                    <div class="stage-distance">⏱️ 10 heures de Savannah</div>
-                    <div class="stage-description">
-                        L'écosystème unique des Everglades de Floride ! Alligators, crocodiles, oiseaux tropicaux, végétation marécageuse. Airboat tour (sensations garanties), observation de la faune, marche dans la nature sauvage. Camping près de Miami en fin de journée.
-                    </div>
-                    <div class="highlights">
-                        <div class="highlight"><strong>🐊</strong> Alligators & Crocodiles</div>
-                        <div class="highlight"><strong>🚤</strong> Airboat Tour</div>
-                        <div class="highlight"><strong>🦅</strong> Faune Tropicale</div>
-                        <div class="highlight"><strong>🌿</strong> Écosystème Unique</div>
-                    </div>
-                </div>
-                
-                <!-- ÉTAPE 6 -->
-                <div class="stage-card">
-                    <div class="stage-header">
-                        <div class="stage-name">6. Miami</div>
-                        <span class="stage-day">Jour 6-7</span>
-                    </div>
-                    <div class="stage-distance">⏱️ 1 heure des Everglades</div>
-                    <div class="stage-description">
-                        Miami Beach avec ses buildings Art Deco colorés, plages de sable fin, Ocean Drive vibrant. Vibrante scène culturelle latino, restaurants gastronomiques, vie nocturne légendaire. Repos avant le vol pour Cancun. Dernière nuit américaine en bord de plage.
-                    </div>
-                    <div class="highlights">
-                        <div class="highlight"><strong>🏖️</strong> Miami Beach & Plages</div>
-                        <div class="highlight"><strong>🏛️</strong> Architecture Art Deco</div>
-                        <div class="highlight"><strong>🎉</strong> Vie Nocturne</div>
-                        <div class="highlight"><strong>🌅</strong> Coucher Spectaculaire</div>
-                    </div>
-                </div>
-                
-            </div>
-        </section>
-        
-        <!-- CONSEILS ROAD TRIP -->
-        <section class="mb-20">
-            <div class="bg-yellow-50 border-l-4 border-jaune-citron p-8 rounded-lg">
-                <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">💡 Conseils pour le Road Trip</h3>
-                <ul class="space-y-3 text-gray-700">
-                    <li><strong>Distance:</strong> Limiter à 5-6 heures de route par jour maximum</li>
-                    <li><strong>Essence:</strong> Remplir le réservoir régulièrement. Essence moins chère sur les autoroutes</li>
-                    <li><strong>Camping:</strong> Réserver en ligne pour les meilleurs spots. Gratuit sur BLM lands</li>
-                    <li><strong>Routes:</strong> Les routes secondaires (US-2, Blue Ridge Parkway) sont magnifiques mais plus lentes</li>
-                    <li><strong>Nourriture:</strong> Cuisiner dans le van pour économiser et pour l'aventure</li>
-                    <li><strong>Sécurité:</strong> Laisser des messages aux proches sur les étapes du jour</li>
-                    <li><strong>Souvenirs:</strong> Léo aura du mal à choisir ses meilleures photos du voyage</li>
-                    <li><strong>Flexibilité:</strong> Être prêt à changer les plans pour les bonnes surprises</li>
-                </ul>
-            </div>
-        </section>
-        
-    </main>
+            <div id="map-container" class="reveal"></div>
+        </div>
+    </section>
     
-    <!-- FOOTER -->
-    <footer class="bg-gradient-to-r from-green-500 to-green-700 text-white py-16 mt-32">
-        <div class="max-w-7xl mx-auto px-6">
-            <!-- Convertisseur de Devises -->
-            <div class="bg-green-800 rounded-lg p-8 mb-12">
-                <h3 class="font-playfair text-2xl mb-6 text-center">💱 Convertisseur de Devises</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">EUR (€)</label>
-                        <input type="number" id="eur" placeholder="0" class="w-full px-4 py-2 rounded bg-green-700 text-white" value="1">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">USD ($)</label>
-                        <input type="number" id="usd" placeholder="0" class="w-full px-4 py-2 rounded bg-green-700 text-white" readonly>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">MXN (₱)</label>
-                        <input type="number" id="mxn" placeholder="0" class="w-full px-4 py-2 rounded bg-green-700 text-white" readonly>
-                    </div>
-                </div>
+    <div class="divider max-w-7xl mx-auto"></div>
+    
+    <!-- ITINÉRAIRE -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="text-sm tracking-widest uppercase mb-4" style="color: #B22234;">3200 km</p>
+                <h2 class="section-title">L'<span>ITINÉRAIRE</span></h2>
             </div>
             
-            <!-- Liens Footer -->
-            <div class="text-center border-t border-green-700 pt-8">
-                <h3 class="font-playfair text-3xl mb-4">ROAD TRIP VAN</h3>
-                <p class="font-montserrat font-light mb-6 text-lg">Une aventure de 10 jours sur les routes de l'Amérique</p>
-                <div class="flex justify-center gap-8 mb-8 flex-wrap">
-                    <a href="nyc.html" class="hover:text-jaune-citron">Étape Précédente</a>
-                    <a href="mexique.html" class="hover:text-jaune-citron">Vers le Mexique</a>
-                    <a href="carte-itineraire.html" class="hover:text-jaune-citron">Voir Carte</a>
+            <div class="max-w-2xl mx-auto">
+                <div class="route-step reveal">
+                    <div class="route-number">01</div>
+                    <div>
+                        <div class="route-city">WASHINGTON DC</div>
+                        <div class="route-date">20-21 Décembre · Capitale fédérale</div>
+                    </div>
                 </div>
-                <p class="text-sm text-green-200">→ Vers le Mexique (31 Décembre)</p>
+                <div class="route-step reveal">
+                    <div class="route-number">02</div>
+                    <div>
+                        <div class="route-city">SHENANDOAH</div>
+                        <div class="route-date">21-22 Décembre · Parc National</div>
+                    </div>
+                </div>
+                <div class="route-step reveal">
+                    <div class="route-number">03</div>
+                    <div>
+                        <div class="route-city">CHARLESTON</div>
+                        <div class="route-date">23-24 Décembre · Caroline du Sud</div>
+                    </div>
+                </div>
+                <div class="route-step reveal">
+                    <div class="route-number">04</div>
+                    <div>
+                        <div class="route-city">SAVANNAH</div>
+                        <div class="route-date">25 Décembre · Noël dans le Sud</div>
+                    </div>
+                </div>
+                <div class="route-step reveal">
+                    <div class="route-number">05</div>
+                    <div>
+                        <div class="route-city">EVERGLADES</div>
+                        <div class="route-date">26-27 Décembre · Faune sauvage</div>
+                    </div>
+                </div>
+                <div class="route-step reveal">
+                    <div class="route-number">06</div>
+                    <div>
+                        <div class="route-city">MIAMI</div>
+                        <div class="route-date">28-30 Décembre · Fin du road trip</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="divider max-w-7xl mx-auto"></div>
+    
+    <!-- HIGHLIGHTS -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="text-sm tracking-widest uppercase mb-4" style="color: #B22234;">L'aventure</p>
+                <h2 class="section-title">LES <span>MOMENTS</span> FORTS</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card reveal">
+                    <span class="text-3xl mb-4 block">🏛️</span>
+                    <h3>MONUMENTS DC</h3>
+                    <p class="text-white/60">Lincoln Memorial, Capitol, White House — le cœur de l'Amérique.</p>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.1s;">
+                    <span class="text-3xl mb-4 block">��️</span>
+                    <h3>BLUE RIDGE</h3>
+                    <p class="text-white/60">Skyline Drive à travers les Appalaches, vues spectaculaires.</p>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.2s;">
+                    <span class="text-3xl mb-4 block">🐊</span>
+                    <h3>EVERGLADES</h3>
+                    <p class="text-white/60">Alligators, mangroves, airboat — la nature sauvage de Floride.</p>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.3s;">
+                    <span class="text-3xl mb-4 block">🌴</span>
+                    <h3>MIAMI BEACH</h3>
+                    <p class="text-white/60">Art Deco, Ocean Drive, ambiance latine.</p>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.4s;">
+                    <span class="text-3xl mb-4 block">🎄</span>
+                    <h3>NOËL DANS LE SUD</h3>
+                    <p class="text-white/60">Un Noël pas comme les autres, sous les palmiers.</p>
+                </div>
+                <div class="card reveal" style="transition-delay: 0.5s;">
+                    <span class="text-3xl mb-4 block">🚐</span>
+                    <h3>VAN LIFE</h3>
+                    <p class="text-white/60">Liberté totale, campings sauvages, couchers de soleil.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- NEXT -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-white/50 mb-4">Prochaine étape</p>
+            <a href="mexique.html" class="btn-primary">MEXIQUE →</a>
+        </div>
+    </section>
+    
+    <!-- FOOTER -->
+    <footer class="py-12 px-6 mt-16">
+        <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-4">
+            <p class="text-white/30 text-sm">© 2025 AMÉRICACA</p>
+            <div class="flex gap-6">
+                <a href="index.html" class="text-white/50 hover:text-white transition-colors text-sm">Accueil</a>
+                <a href="nyc.html" class="text-white/50 hover:text-white transition-colors text-sm">NYC</a>
+                <a href="mexique.html" class="text-white/50 hover:text-white transition-colors text-sm">Mexique</a>
             </div>
         </div>
     </footer>
     
-    <!-- Leaflet JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <script>
-        // Convertisseur de devises
-        const rates = {
-            EUR: 1,
-            USD: 1.08,
-            MXN: 18.50
-        };
-        
-        const eurInput = document.getElementById('eur');
-        const usdInput = document.getElementById('usd');
-        const mxnInput = document.getElementById('mxn');
-        
-        function updateCurrency() {
-            const eurValue = parseFloat(eurInput.value) || 0;
-            usdInput.value = (eurValue * rates.USD).toFixed(2);
-            mxnInput.value = (eurValue * rates.MXN).toFixed(2);
+        const reveals = document.querySelectorAll('.reveal');
+        function revealOnScroll() {
+            reveals.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
+            });
         }
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
         
-        eurInput.addEventListener('input', updateCurrency);
-        updateCurrency();
+        const map = L.map('map-container').setView([33, -80], 5);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '© CARTO' }).addTo(map);
         
-        // Initialiser la carte centrée sur la côte Est
-        const map = L.map('map-container').setView([37.5, -76.0], 6);
-        
-        // Ajouter les tuiles OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
-            maxZoom: 19,
-            minZoom: 5
-        }).addTo(map);
-        
-        // Points du road trip
-        const routePoints = [
-            { lat: 38.8072, lng: -77.0369, name: 'Washington, DC', desc: 'Jour 1-2: Départ de NYC en van' },
-            { lat: 36.1627, lng: -77.2093, name: 'Williamsburg, Virginia', desc: 'Jour 2: Histoire coloniale' },
-            { lat: 35.7796, lng: -78.6382, name: 'Raleigh, North Carolina', desc: 'Jour 3: Cité du Triangle' },
-            { lat: 35.0918, lng: -79.7620, name: 'Greensboro, NC', desc: 'Jour 4: Centre des Appalaches' },
-            { lat: 34.4264, lng: -81.9289, name: 'Columbia, South Carolina', desc: 'Jour 5: Sud historique' },
-            { lat: 33.7490, lng: -84.3880, name: 'Atlanta, Georgia', desc: 'Jour 6: La belle Atlanta' },
-            { lat: 32.0809, lng: -81.0912, name: 'Savannah, Georgia', desc: 'Jour 7: Charme du Sud' },
-            { lat: 28.5391, lng: -81.3792, name: 'Orlando, Florida', desc: 'Jour 8: Passage en Floride' },
-            { lat: 25.7617, lng: -80.1918, name: 'Miami, Florida', desc: 'Jour 9-10: Fin du road trip!' }
+        const route = [
+            { lat: 38.9072, lng: -77.0369, name: 'Washington DC' },
+            { lat: 38.5216, lng: -78.3519, name: 'Shenandoah' },
+            { lat: 32.7765, lng: -79.9311, name: 'Charleston' },
+            { lat: 32.0809, lng: -81.0912, name: 'Savannah' },
+            { lat: 25.3861, lng: -80.7314, name: 'Everglades' },
+            { lat: 25.7617, lng: -80.1918, name: 'Miami' }
         ];
         
-        // Tracer la ligne du parcours
-        const routeLatLngs = routePoints.map(p => [p.lat, p.lng]);
-        L.polyline(routeLatLngs, {
-            color: '#34d399',
-            weight: 4,
-            opacity: 0.8,
-            dashArray: '5, 5'
-        }).addTo(map);
-        
-        // Ajouter les marqueurs
-        routePoints.forEach((point, index) => {
-            L.circleMarker([point.lat, point.lng], {
-                radius: 8,
-                fillColor: '#34d399',
-                color: '#f2cb05',
-                weight: 3,
-                opacity: 1,
-                fillOpacity: 0.8
-            }).bindPopup(`<strong>${point.name}</strong><br>${point.desc}`).addTo(map);
+        route.forEach((loc, i) => {
+            L.circleMarker([loc.lat, loc.lng], {
+                radius: 8, fillColor: '#B22234', color: '#fff', weight: 2, fillOpacity: 0.9
+            }).addTo(map).bindPopup(`<strong style="color:#B22234">${loc.name}</strong>`);
         });
-
-        // ===== MÉTÉO EN DIRECT =====
-        async function fetchWeather(lat, lon, elementId) {
-            try {
-                const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m&timezone=auto`);
-                const data = await response.json();
-                const temp = Math.round(data.current.temperature_2m);
-                document.getElementById(elementId).textContent = `${temp}°C`;
-            } catch (error) {
-                document.getElementById(elementId).textContent = '--°C';
-            }
-        }
         
-        fetchWeather(38.9072, -77.0369, 'temp-washington');  // Washington DC
-        fetchWeather(25.7617, -80.1918, 'temp-miami');       // Miami
+        L.polyline(route.map(r => [r.lat, r.lng]), { color: '#B22234', weight: 3, opacity: 0.7, dashArray: '10,10' }).addTo(map);
     </script>
 </body>
 </html>

@@ -3,530 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Participants | AMÉRIPROUT</title>
+    <title>TEAM | AMÉRICACA</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'playfair': ['Playfair Display', 'serif'],
-                        'montserrat': ['Montserrat', 'sans-serif'],
-                    },
-                    colors: {
-                        'bleu-majorelle': '#5B9FB5',
-                        'jaune-citron': '#F4D9A6',
-                        'cream': '#FAFBF8',
-                    },
-                }
-            }
+            theme: { extend: { colors: { 'usa-red': '#B22234', 'usa-blue': '#3C3B6E', 'dark': '#0a0a0a' } } }
         }
     </script>
     
     <style>
-        * {
-            font-family: 'Montserrat', sans-serif;
-        }
+        * { font-family: 'Space Grotesk', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: #0a0a0a; color: white; overflow-x: hidden; }
         
-        h1, h2, h3, h4 {
-            font-family: 'Playfair Display', serif;
-        }
+        nav { background: transparent; backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        nav a { color: white; font-weight: 500; transition: all 0.3s ease; text-decoration: none; letter-spacing: 0.5px; }
+        nav a:hover { color: #B22234; }
+        .nav-pill { background: rgba(178, 34, 52, 0.2); border: 1px solid rgba(178, 34, 52, 0.5); padding: 8px 16px; border-radius: 100px; font-size: 0.85rem; transition: all 0.3s ease; }
+        .nav-pill:hover { background: #B22234; color: white !important; transform: scale(1.05); }
+        .nav-pill.active { background: #B22234; color: white !important; }
         
-        body {
-            background-color: #f9f9f9;
-        }
+        .page-hero { min-height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding-top: 100px; }
+        .page-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 50% 50%, rgba(178, 34, 52, 0.15) 0%, transparent 60%); }
+        .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 15vw, 10rem); line-height: 0.9; background: linear-gradient(135deg, #fff 0%, #B22234 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; }
+        .page-subtitle { font-size: 1.2rem; color: rgba(255,255,255,0.5); margin-top: 1rem; letter-spacing: 4px; text-transform: uppercase; }
         
-        nav {
-            background: linear-gradient(135deg, #5B9FB5 0%, #4A7A92 100%);
-            box-shadow: 0 8px 32px rgba(91, 159, 181, 0.15);
-        }
+        .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 6vw, 4rem); letter-spacing: 2px; }
+        .section-title span { color: #B22234; }
         
-        nav a {
-            color: white;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            position: relative;
-        }
+        .participant-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 2rem; transition: all 0.4s ease; text-align: center; }
+        .participant-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(178, 34, 52, 0.3); transform: translateY(-8px); }
         
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #F4D9A6;
-            transition: width 0.3s ease;
-        }
+        .avatar { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #B22234, #3C3B6E); margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; overflow: hidden; filter: grayscale(80%); transition: all 0.4s ease; border: 3px solid rgba(255,255,255,0.1); }
+        .participant-card:hover .avatar { filter: grayscale(0%); border-color: #B22234; }
         
-        nav a:hover::after {
-            width: 100%;
-        }
+        .participant-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; margin-bottom: 0.25rem; }
+        .participant-role { color: #B22234; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; }
+        .participant-bio { color: rgba(255,255,255,0.5); font-size: 0.95rem; line-height: 1.6; }
         
-        .page-header {
-            background: linear-gradient(135deg, #5B9FB5 0%, #4A7A92 100%);
-            color: white;
-            padding: 6rem 2rem 4rem;
-            text-align: center;
-        }
-        
-        .page-header h1 {
-            font-size: clamp(2rem, 8vw, 3.5rem);
-            margin-bottom: 1rem;
-        }
-        
-        .participant-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .participant-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 16px 48px rgba(4, 118, 217, 0.2);
-        }
-        
-        .participant-image {
-            width: 100%;
-            height: 250px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #5B9FB5 0%, #4A7A92 100%);
-            position: relative;
-        }
-        
-        .participant-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: top;
-            transition: all 0.4s ease;
-        }
-        
-        .participant-card:hover .participant-image img {
-            transform: scale(1.08);
-        }
-        
-        .participant-info {
-            padding: 2rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .participant-info h3 {
-            font-size: 2rem;
-            color: #5B9FB5;
-            margin-bottom: 0.5rem;
-        }
-        
-        .participant-role {
-            color: #F4D9A6;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-        }
-        
-        .participant-bio {
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-            flex: 1;
-        }
-        
-        .participant-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top: 2px solid #F4D9A6;
-        }
-        
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #5B9FB5;
-        }
-        
-        .stat-label {
-            font-size: 0.85rem;
-            color: #999;
-            margin-top: 0.5rem;
-        }
-        
-        .section-title {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            color: #5B9FB5;
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #5B9FB5, #F4D9A6);
-            border-radius: 2px;
-        }
-        
-        .participant-vertical-card {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s ease;
-            aspect-ratio: 3/4;
-            cursor: pointer;
-        }
-        
-        .participant-vertical-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 48px rgba(91, 159, 181, 0.3);
-        }
-        
-        .participant-vertical-image {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .participant-vertical-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: top;
-            transition: transform 0.4s ease;
-        }
-        
-        .participant-vertical-card:hover .participant-vertical-image img {
-            transform: scale(1.05);
-        }
-        
-        .participant-vertical-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            color: white;
-            padding: 1.5rem 1rem 1rem;
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-        
-        .participant-vertical-card:hover .participant-vertical-overlay {
-            transform: translateY(0);
-        }
-        
-        .participant-vertical-overlay h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin: 0.5rem 0;
-            font-family: 'Playfair Display', serif;
-        }
-        
-        .participant-vertical-overlay p {
-            font-size: 0.85rem;
-            margin: 0;
-            font-weight: 500;
-        }
+        footer { border-top: 1px solid rgba(255,255,255,0.1); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
+    
     <!-- NAVIGATION -->
-    <nav class="fixed top-0 w-full z-50 py-4 px-8">
+    <nav class="fixed top-0 w-full z-50 py-5 px-8">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="font-playfair text-2xl font-bold text-white">AMÉRIPROUT</a>
+            <a href="index.html" style="font-family: 'Bebas Neue', sans-serif;" class="text-2xl tracking-wider">AMÉRICACA</a>
             <div class="flex gap-8 items-center">
-                <a href="nyc.html">NYC</a>
-                <a href="roadtrip.html">Road Trip</a>
-                <a href="mexique.html">Mexique</a>
-                <span class="text-white/30">|</span>
-                <a href="carte-itineraire.html" class="bg-white/20 px-3 py-1 rounded-full text-sm">🗺️ Carte</a>
-                <a href="participants.html" class="bg-white/20 px-3 py-1 rounded-full text-sm">👥 Équipe</a>
-                <a href="budget.html" class="bg-white/20 px-3 py-1 rounded-full text-sm">💰 Budget</a>
+                <a href="nyc.html" class="text-sm">NYC</a>
+                <a href="roadtrip.html" class="text-sm">ROAD TRIP</a>
+                <a href="mexique.html" class="text-sm">MEXIQUE</a>
+                <span class="text-white/20">|</span>
+                <a href="carte-itineraire.html" class="nav-pill">🗺️ CARTE</a>
+                <a href="participants.html" class="nav-pill active">👥 TEAM</a>
+                <a href="budget.html" class="nav-pill">💰 BUDGET</a>
             </div>
         </div>
     </nav>
     
-    <!-- PAGE HEADER -->
-    <div class="page-header" style="margin-top: 80px;">
-        <h1>Les 5 Aventuriers</h1>
-        <p class="text-xl font-light text-blue-100">Des voyageurs passionnés pour une aventure inoubliable</p>
-    </div>
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="relative z-10 text-center px-6">
+            <p class="text-sm tracking-widest uppercase mb-4" style="color: #B22234;">👥 L'équipe</p>
+            <h1 class="page-title">LA<br>TEAM</h1>
+            <p class="page-subtitle">Les aventuriers d'AMÉRICACA</p>
+        </div>
+    </section>
     
-    <!-- CONTENU -->
-    <main class="max-w-7xl mx-auto px-6 py-20">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-12 mb-16">
-            <!-- LÉGENDE -->
-            <div class="bg-blue-50 border-l-4 border-bleu-majorelle p-8 rounded-lg mb-8">
-                <h3 class="font-playfair text-2xl text-bleu-majorelle mb-4">À Propos de Cette Aventure</h3>
-                <p class="text-gray-700 leading-relaxed">Cinq personnalités distinctes réunies pour une aventure épique de 22 jours à travers l'Amérique du Nord et les Caraïbes. Chacun apporte sa sensibilité, son énergie et ses talents pour créer une expérience de voyage mémorable. De la découverte culturelle urbaine aux paysages naturels sauvages, ce groupe d'aventuriers a choisi de repousser ses limites ensemble.</p>
+    <!-- PARTICIPANTS -->
+    <section class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="participant-card reveal">
+                    <div class="avatar">👨‍💼</div>
+                    <h3 class="participant-name">PIERRE</h3>
+                    <p class="participant-role">Le Pilote</p>
+                    <p class="participant-bio">Maître du volant et des playlists road trip.</p>
+                </div>
+                
+                <div class="participant-card reveal" style="transition-delay: 0.1s;">
+                    <div class="avatar">👩‍🦰</div>
+                    <h3 class="participant-name">MARIE</h3>
+                    <p class="participant-role">La Planificatrice</p>
+                    <p class="participant-bio">Excel master, elle a tout prévu au jour près.</p>
+                </div>
+                
+                <div class="participant-card reveal" style="transition-delay: 0.2s;">
+                    <div class="avatar">🧔</div>
+                    <h3 class="participant-name">THOMAS</h3>
+                    <p class="participant-role">Le Photographe</p>
+                    <p class="participant-bio">Drone en poche, toujours prêt pour la shot.</p>
+                </div>
+                
+                <div class="participant-card reveal" style="transition-delay: 0.3s;">
+                    <div class="avatar">👩‍🎤</div>
+                    <h3 class="participant-name">JULIE</h3>
+                    <p class="participant-role">L'Aventurière</p>
+                    <p class="participant-bio">La première à dire oui à toutes les activités.</p>
+                </div>
+                
+                <div class="participant-card reveal" style="transition-delay: 0.4s;">
+                    <div class="avatar">👨‍🍳</div>
+                    <h3 class="participant-name">ANTOINE</h3>
+                    <p class="participant-role">Le Foodie</p>
+                    <p class="participant-bio">Trouve toujours le meilleur resto du coin.</p>
+                </div>
+                
+                <div class="participant-card reveal" style="transition-delay: 0.5s;">
+                    <div class="avatar">👩‍💻</div>
+                    <h3 class="participant-name">EVE</h3>
+                    <p class="participant-role">La Créative</p>
+                    <p class="participant-bio">Designer du site et des souvenirs.</p>
+                </div>
+                
+                <div class="participant-card reveal" style="transition-delay: 0.6s;">
+                    <div class="avatar">🧑‍🎨</div>
+                    <h3 class="participant-name">LUCAS</h3>
+                    <p class="participant-role">Le Chill</p>
+                    <p class="participant-bio">Zen en toutes circonstances, même en retard.</p>
+                </div>
+                
+                <div class="participant-card reveal" style="transition-delay: 0.7s;">
+                    <div class="avatar">👩‍🔬</div>
+                    <h3 class="participant-name">CAMILLE</h3>
+                    <p class="participant-role">La Guide</p>
+                    <p class="participant-bio">Connaît l'histoire de chaque monument.</p>
+                </div>
+                
             </div>
         </div>
-        
-        <!-- PARTICIPANTS GRID -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
-            
-            <!-- LÉON -->
-            <div class="participant-vertical-card">
-                <div class="participant-vertical-image">
-                    <img src="tête/leo.PNG" alt="Léo">
-                    <div class="participant-vertical-overlay">
-                        <h3>Léo</h3>
-                        <p>🎬 Le Cinéaste</p>
-                    </div>
+    </section>
+    
+    <!-- STATS -->
+    <section class="py-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="reveal">
+                    <p style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #B22234;">8</p>
+                    <p class="text-white/50 text-sm tracking-widest uppercase">Aventuriers</p>
+                </div>
+                <div class="reveal" style="transition-delay: 0.1s;">
+                    <p style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #B22234;">22</p>
+                    <p class="text-white/50 text-sm tracking-widest uppercase">Jours</p>
+                </div>
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <p style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #B22234;">3</p>
+                    <p class="text-white/50 text-sm tracking-widest uppercase">Pays</p>
+                </div>
+                <div class="reveal" style="transition-delay: 0.3s;">
+                    <p style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #B22234;">∞</p>
+                    <p class="text-white/50 text-sm tracking-widest uppercase">Souvenirs</p>
                 </div>
             </div>
-            
-            <!-- SARAH -->
-            <div class="participant-vertical-card">
-                <div class="participant-vertical-image">
-                    <img src="tête/sarah.PNG" alt="Sarah">
-                    <div class="participant-vertical-overlay">
-                        <h3>Sarah</h3>
-                        <p>🗺️ La Navigatrice</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- EMMA -->
-            <div class="participant-vertical-card">
-                <div class="participant-vertical-image">
-                    <img src="tête/emma.PNG" alt="Emma">
-                    <div class="participant-vertical-overlay">
-                        <h3>Emma</h3>
-                        <p>❤️ L'Aventurière</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- PALMYRE -->
-            <div class="participant-vertical-card">
-                <div class="participant-vertical-image">
-                    <img src="tête/palmyre.PNG" alt="Palmyre">
-                    <div class="participant-vertical-overlay">
-                        <h3>Palmyre</h3>
-                        <p>🌿 La Sage</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- EVE -->
-            <div class="participant-vertical-card">
-                <div class="participant-vertical-image">
-                    <img src="tête/eve.PNG" alt="Eve">
-                    <div class="participant-vertical-overlay">
-                        <h3>Eve</h3>
-                        <p>💪 Chercheuse de Limites</p>
-                    </div>
-                </div>
-            </div>
-            
         </div>
-        
-        <!-- DESCRIPTIONS DÉTAILLÉES -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-12 mt-20">
-            
-            <!-- LÉON -->
-            <div class="participant-card">
-                <div class="participant-image">
-                    <img src="tête/leo.PNG" alt="Léo">
-                </div>
-                <div class="participant-info">
-                    <h3>Léo</h3>
-                    <div class="participant-role">🎬 Le Cinéaste</div>
-                    <p class="participant-bio">
-                        Léo, c'est l'âme créative du groupe. Passionné par la photographie et le cinéma, il capture chaque moment avec une sensibilité artistique unique. Ses yeux perçoivent la beauté là où d'autres ne voient que du quotidien. Léo apporte à ce voyage une perspective visuelle qui transformera chaque étape en histoire épique.
-                    </p>
-                    <div class="participant-stats">
-                        <div class="stat">
-                            <div class="stat-value">22</div>
-                            <div class="stat-label">Jours Documentés</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">∞</div>
-                            <div class="stat-label">Créativité</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- SARAH -->
-            <div class="participant-card">
-                <div class="participant-image">
-                    <img src="tête/sarah.PNG" alt="Sarah">
-                </div>
-                <div class="participant-info">
-                    <h3>Sarah</h3>
-                    <div class="participant-role">🗺️ La Navigatrice</div>
-                    <p class="participant-bio">
-                        Sarah est la stratège du groupe, celle qui planifie les itinéraires complexes et résout les imprévus avec calme. Adventurière dans l'âme, elle adore explorer les chemins de traverse et découvrir les perles cachées. Sa connaissance des routes et des cultures rend chaque détour plus riche. Elle est le GPS vivant et le cœur battant de cette aventure.
-                    </p>
-                    <div class="participant-stats">
-                        <div class="stat">
-                            <div class="stat-value">3200+</div>
-                            <div class="stat-label">Km Planifiés</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">6</div>
-                            <div class="stat-label">Villes au Programme</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- EMMA -->
-            <div class="participant-card">
-                <div class="participant-image">
-                    <img src="tête/emma.PNG" alt="Emma">
-                </div>
-                <div class="participant-info">
-                    <h3>Emma</h3>
-                    <div class="participant-role">❤️ L'Aventurière Authentique</div>
-                    <p class="participant-bio">
-                        Emma rayonne d'une énergie contagieuse qui dynamise le groupe. Elle adore relever des défis, goûter à la cuisine locale et danser dans les rues des villes découvertes. Son authenticité et sa curiosité sans limites font que chaque rencontre devient une amitié, chaque rue une découverte, chaque repas une célébration. Emma, c'est la vie elle-même.
-                    </p>
-                    <div class="participant-stats">
-                        <div class="stat">
-                            <div class="stat-value">∞</div>
-                            <div class="stat-label">Sourires</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">5</div>
-                            <div class="stat-label">Langues Parlées</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- PALMYRE -->
-            <div class="participant-card">
-                <div class="participant-image">
-                    <img src="tête/palmyre.PNG" alt="Palmyre">
-                </div>
-                <div class="participant-info">
-                    <h3>Palmyre</h3>
-                    <div class="participant-role">🌿 La Sage Contemplative</div>
-                    <p class="participant-bio">
-                        Palmyre possède une sagesse tranquille qui équilibre l'énergie du groupe. Elle contemple les paysages avec émerveillement, médite au coucher de soleil et trouve du sens dans chaque moment. Ses réflexions profondes nous rappellent l'importance de ralentir, d'apprécier et de savourer. C'est notre connectrice à la nature et à nous-mêmes.
-                    </p>
-                    <div class="participant-stats">
-                        <div class="stat">
-                            <div class="stat-value">∞</div>
-                            <div class="stat-label">Pensées Profondes</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">22</div>
-                            <div class="stat-label">Couchers de Soleil</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- EVE -->
-            <div class="participant-card">
-                <div class="participant-image">
-                    <img src="tête/eve.PNG" alt="Eve">
-                </div>
-                <div class="participant-info">
-                    <h3>Eve</h3>
-                    <div class="participant-role">💪 La Chercheuse de Limites</div>
-                    <p class="participant-bio">
-                        Eve est celle qui dit "pourquoi pas ?" face aux défis les plus fou. Elle adore les adrénalines: la plongée dans les cenotes, les randonnées en montagne, l'exploration urbaine intense. Son esprit intrépide nous pousse tous à être braves et à tenter l'impossible. Eve nous rappelle que la vraie vie commence où la peur se termine.
-                    </p>
-                    <div class="participant-stats">
-                        <div class="stat">
-                            <div class="stat-value">∞</div>
-                            <div class="stat-label">Aventures</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">0</div>
-                            <div class="stat-label">Limites</div>
-                        </div>
-        
-    </main>
+    </section>
     
     <!-- FOOTER -->
-    <footer class="bg-gradient-to-r from-bleu-majorelle to-blue-900 text-white py-16 mt-32">
-        <div class="max-w-7xl mx-auto px-6">
-            <!-- Convertisseur de Devises -->
-            <div class="bg-blue-800 rounded-lg p-8 mb-12">
-                <h3 class="font-playfair text-2xl mb-6 text-center">💱 Convertisseur de Devises</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">EUR (€)</label>
-                        <input type="number" id="eur" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" value="1">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">USD ($)</label>
-                        <input type="number" id="usd" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" readonly>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">MXN (₱)</label>
-                        <input type="number" id="mxn" placeholder="0" class="w-full px-4 py-2 rounded bg-blue-700 text-white" readonly>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Liens Footer -->
-            <div class="text-center border-t border-blue-700 pt-8">
-                <h3 class="font-playfair text-3xl mb-4">AMÉRIPROUT CANCOUILLE</h3>
-                <p class="font-montserrat font-light mb-6 text-lg">Une aventure épique à travers l'Amérique du Nord et les Caraïbes</p>
-                <div class="flex justify-center gap-8 mb-8 flex-wrap">
-                    <a href="index.html" class="hover:text-jaune-citron">Accueil</a>
-                    <a href="participants.html" class="hover:text-jaune-citron">Participants</a>
-                    <a href="carte-itineraire.html" class="hover:text-jaune-citron">Carte</a>
-                    <a href="budget.html" class="hover:text-jaune-citron">Budget</a>
-                </div>
-                <p class="text-sm text-blue-200">Créé avec passion pour une expérience de voyage mémorable</p>
+    <footer class="py-12 px-6 mt-16">
+        <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-4">
+            <p class="text-white/30 text-sm">© 2025 AMÉRICACA</p>
+            <div class="flex gap-6">
+                <a href="index.html" class="text-white/50 hover:text-white transition-colors text-sm">Accueil</a>
+                <a href="budget.html" class="text-white/50 hover:text-white transition-colors text-sm">Budget</a>
+                <a href="carte-itineraire.html" class="text-white/50 hover:text-white transition-colors text-sm">Carte</a>
             </div>
         </div>
     </footer>
     
     <script>
-        // Taux de change (à jour le 11 décembre 2025)
-        const rates = {
-            EUR: 1,
-            USD: 1.08,
-            MXN: 18.50
-        };
-        
-        const eurInput = document.getElementById('eur');
-        const usdInput = document.getElementById('usd');
-        const mxnInput = document.getElementById('mxn');
-        
-        function updateCurrency() {
-            const eurValue = parseFloat(eurInput.value) || 0;
-            usdInput.value = (eurValue * rates.USD).toFixed(2);
-            mxnInput.value = (eurValue * rates.MXN).toFixed(2);
+        const reveals = document.querySelectorAll('.reveal');
+        function revealOnScroll() {
+            reveals.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
+            });
         }
-        
-        eurInput.addEventListener('input', updateCurrency);
-        updateCurrency();
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
     </script>
 </body>
 </html>
