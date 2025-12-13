@@ -36,19 +36,66 @@
         .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 6vw, 4rem); letter-spacing: 2px; }
         .section-title span { color: #B22234; }
         
-        .participant-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 2rem; transition: all 0.4s ease; text-align: center; }
-        .participant-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(178, 34, 52, 0.3); transform: translateY(-8px); }
+        .participant-card { 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(255,255,255,0.08); 
+            transition: all 0.4s ease; 
+            overflow: hidden;
+        }
+        .participant-card:hover { 
+            background: rgba(255,255,255,0.06); 
+            border-color: rgba(178, 34, 52, 0.5); 
+            transform: translateY(-8px); 
+        }
         
-        .avatar { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #B22234, #3C3B6E); margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; overflow: hidden; filter: grayscale(80%); transition: all 0.4s ease; border: 3px solid rgba(255,255,255,0.1); }
-        .participant-card:hover .avatar { filter: grayscale(0%); border-color: #B22234; }
+        .avatar-wrapper {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            filter: grayscale(80%);
+            transition: all 0.4s ease;
+        }
+        
+        .participant-card:hover .avatar-wrapper img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+        
+        .participant-content {
+            padding: 1.5rem;
+            text-align: center;
+        }
         
         .participant-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; margin-bottom: 0.25rem; }
-        .participant-role { color: #B22234; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; }
-        .participant-bio { color: rgba(255,255,255,0.5); font-size: 0.95rem; line-height: 1.6; }
+        .participant-role { color: #B22234; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; font-weight: 600; }
+        .participant-bio { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.6; }
+        
+        .participant-tag {
+            display: inline-block;
+            background: rgba(178, 34, 52, 0.2);
+            border: 1px solid rgba(178, 34, 52, 0.3);
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+            margin: 0.25rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
         
         footer { border-top: 1px solid rgba(255,255,255,0.1); }
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(178, 34, 52, 0.5), transparent); margin: 4rem 0; }
     </style>
 </head>
 <body>
@@ -72,83 +119,116 @@
     <!-- HERO -->
     <section class="page-hero">
         <div class="relative z-10 text-center px-6">
-            <p class="text-sm tracking-widest uppercase mb-4" style="color: #B22234;">👥 L'équipe</p>
+            <p class="text-sm tracking-widest uppercase mb-4" style="color: #B22234;">👥 Les aventuriers</p>
             <h1 class="page-title">LA<br>TEAM</h1>
-            <p class="page-subtitle">Les aventuriers d'AMÉRICACA</p>
+            <p class="page-subtitle">5 amis · 1 aventure · 0 limite</p>
         </div>
     </section>
     
     <!-- PARTICIPANTS -->
     <section class="py-20 px-6">
         <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
+                <!-- EVE -->
                 <div class="participant-card reveal">
-                    <div class="avatar">👨‍💼</div>
-                    <h3 class="participant-name">PIERRE</h3>
-                    <p class="participant-role">Le Pilote</p>
-                    <p class="participant-bio">Maître du volant et des playlists road trip.</p>
+                    <div class="avatar-wrapper">
+                        <img src="tête/eve.PNG" alt="Eve">
+                    </div>
+                    <div class="participant-content">
+                        <h3 class="participant-name">EVE</h3>
+                        <p class="participant-role">📸 La Photographe</p>
+                        <p class="participant-bio">Sportive dans l'âme, animée par le défi. Appareil en main, elle va capturer chaque moment de l'aventure. Attention au montage final ! 🎬</p>
+                        <div class="mt-4">
+                            <span class="participant-tag">Sport</span>
+                            <span class="participant-tag">Photo</span>
+                            <span class="participant-tag">Défis</span>
+                        </div>
+                    </div>
                 </div>
                 
+                <!-- LÉO -->
                 <div class="participant-card reveal" style="transition-delay: 0.1s;">
-                    <div class="avatar">👩‍🦰</div>
-                    <h3 class="participant-name">MARIE</h3>
-                    <p class="participant-role">La Planificatrice</p>
-                    <p class="participant-bio">Excel master, elle a tout prévu au jour près.</p>
+                    <div class="avatar-wrapper">
+                        <img src="tête/leo.PNG" alt="Léo">
+                    </div>
+                    <div class="participant-content">
+                        <h3 class="participant-name">LÉO</h3>
+                        <p class="participant-role">💰 Le Trésorier</p>
+                        <p class="participant-bio">Le seul mec du groupe, mais quel mec ! Maître des comptes et gardien du budget. Il gère les finances d'une main de maître entre toutes ces queens. 👑</p>
+                        <div class="mt-4">
+                            <span class="participant-tag">Budget Master</span>
+                            <span class="participant-tag">Unique en son genre</span>
+                        </div>
+                    </div>
                 </div>
                 
+                <!-- SARAH -->
                 <div class="participant-card reveal" style="transition-delay: 0.2s;">
-                    <div class="avatar">🧔</div>
-                    <h3 class="participant-name">THOMAS</h3>
-                    <p class="participant-role">Le Photographe</p>
-                    <p class="participant-bio">Drone en poche, toujours prêt pour la shot.</p>
+                    <div class="avatar-wrapper">
+                        <img src="tête/sarah.PNG" alt="Sarah">
+                    </div>
+                    <div class="participant-content">
+                        <h3 class="participant-name">SARAH</h3>
+                        <p class="participant-role">🤸 L'Acrobate</p>
+                        <p class="participant-bio">Toujours motivée ! Responsable communication au club étudiant de l'UQAC. Ses études ? Les plus stylées : elle conçoit des crèmes à partir d'écorce d'arbre. 🌲✨</p>
+                        <div class="mt-4">
+                            <span class="participant-tag">Acrobate</span>
+                            <span class="participant-tag">UQAC</span>
+                            <span class="participant-tag">Scientifique</span>
+                        </div>
+                    </div>
                 </div>
                 
+                <!-- EMMA -->
                 <div class="participant-card reveal" style="transition-delay: 0.3s;">
-                    <div class="avatar">👩‍🎤</div>
-                    <h3 class="participant-name">JULIE</h3>
-                    <p class="participant-role">L'Aventurière</p>
-                    <p class="participant-bio">La première à dire oui à toutes les activités.</p>
+                    <div class="avatar-wrapper">
+                        <img src="tête/emma.PNG" alt="Emma">
+                    </div>
+                    <div class="participant-content">
+                        <h3 class="participant-name">EMMA</h3>
+                        <p class="participant-role">🗣️ La Bilingue</p>
+                        <p class="participant-bio">Force tranquille du groupe. Ses notes en anglais ont fait d'elle notre traductrice officielle. Toujours partante pour n'importe quel plan, même les plus fous ! 🌟</p>
+                        <div class="mt-4">
+                            <span class="participant-tag">Zen</span>
+                            <span class="participant-tag">Bilingue</span>
+                            <span class="participant-tag">Partante</span>
+                        </div>
+                    </div>
                 </div>
                 
+                <!-- PALMYRE -->
                 <div class="participant-card reveal" style="transition-delay: 0.4s;">
-                    <div class="avatar">👨‍🍳</div>
-                    <h3 class="participant-name">ANTOINE</h3>
-                    <p class="participant-role">Le Foodie</p>
-                    <p class="participant-bio">Trouve toujours le meilleur resto du coin.</p>
-                </div>
-                
-                <div class="participant-card reveal" style="transition-delay: 0.5s;">
-                    <div class="avatar">👩‍💻</div>
-                    <h3 class="participant-name">EVE</h3>
-                    <p class="participant-role">La Créative</p>
-                    <p class="participant-bio">Designer du site et des souvenirs.</p>
-                </div>
-                
-                <div class="participant-card reveal" style="transition-delay: 0.6s;">
-                    <div class="avatar">🧑‍🎨</div>
-                    <h3 class="participant-name">LUCAS</h3>
-                    <p class="participant-role">Le Chill</p>
-                    <p class="participant-bio">Zen en toutes circonstances, même en retard.</p>
-                </div>
-                
-                <div class="participant-card reveal" style="transition-delay: 0.7s;">
-                    <div class="avatar">👩‍🔬</div>
-                    <h3 class="participant-name">CAMILLE</h3>
-                    <p class="participant-role">La Guide</p>
-                    <p class="participant-bio">Connaît l'histoire de chaque monument.</p>
+                    <div class="avatar-wrapper">
+                        <img src="tête/palmyre.PNG" alt="Palmyre">
+                    </div>
+                    <div class="participant-content">
+                        <h3 class="participant-name">PALMYRE</h3>
+                        <p class="participant-role">🔥 L'Aventurière</p>
+                        <p class="participant-bio">Prête à dormir chez des inconnus pour vivre des expériences folles. Palmarès : a déjà composé le 911. Inépuisable, toujours des plans pour faire les 400 coups ! 🚨</p>
+                        <div class="mt-4">
+                            <span class="participant-tag">400 coups</span>
+                            <span class="participant-tag">No limit</span>
+                            <span class="participant-tag">Légende</span>
+                        </div>
+                    </div>
                 </div>
                 
             </div>
         </div>
     </section>
     
+    <div class="divider max-w-4xl mx-auto"></div>
+    
     <!-- STATS -->
     <section class="py-20 px-6">
         <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12 reveal">
+                <h2 class="section-title">EN <span>CHIFFRES</span></h2>
+            </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div class="reveal">
-                    <p style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #B22234;">8</p>
+                    <p style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #B22234;">5</p>
                     <p class="text-white/50 text-sm tracking-widest uppercase">Aventuriers</p>
                 </div>
                 <div class="reveal" style="transition-delay: 0.1s;">
@@ -162,6 +242,33 @@
                 <div class="reveal" style="transition-delay: 0.3s;">
                     <p style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #B22234;">∞</p>
                     <p class="text-white/50 text-sm tracking-widest uppercase">Souvenirs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FUN FACTS -->
+    <section class="py-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12 reveal">
+                <h2 class="section-title">FUN <span>FACTS</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="reveal" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 2rem;">
+                    <p class="text-2xl mb-2">👨‍👩‍👧‍👧</p>
+                    <p class="text-white/70">1 gars pour 4 filles... Léo est notre mascotte officielle</p>
+                </div>
+                <div class="reveal" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 2rem; transition-delay: 0.1s;">
+                    <p class="text-2xl mb-2">🚨</p>
+                    <p class="text-white/70">Une membre a déjà appelé le 911... Les USA sont prévenus</p>
+                </div>
+                <div class="reveal" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 2rem; transition-delay: 0.2s;">
+                    <p class="text-2xl mb-2">🌲</p>
+                    <p class="text-white/70">Une future créatrice de cosmétiques à base d'écorce</p>
+                </div>
+                <div class="reveal" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 2rem; transition-delay: 0.3s;">
+                    <p class="text-2xl mb-2">📸</p>
+                    <p class="text-white/70">Préparez-vous au montage vidéo épique d'Eve</p>
                 </div>
             </div>
         </div>
